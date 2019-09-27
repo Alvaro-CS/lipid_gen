@@ -18,19 +18,43 @@ public class Lipid {
 		{
 			throw new NullPointerException();
 		}
+
+		
 		// formula = calculateLipidFormula(skeleton, FAs)
 		mass=0d;
+		name="";
+		length=0;
+		doubleBonds=0;
+		abbvName="";
 		// Method to calculate the mass
 		// mass = calculateMass(Formula);
 		// name = calculateName(Skeleton, FAs);
 		// length = calculateLength(FAs);
 		// doubleBonds = calculateDoubleBonds(FAs);
+		
+	
+		
+	}
+		public Lipid(Fatty_acid fa) throws NullPointerException {
+			if ( fa == null)
+			{
+				throw new NullPointerException();
+			}
+			
+		
+		// formula = calculateLipidFormula(skeleton, FAs)
+		mass=0d;
 		name="";
 		length=0;
 		doubleBonds=0;
 		abbvName="";
+		// Method to calculate the mass
+		// mass = calculateMass(Formula);
+		// name = calculateName(Skeleton, FAs);
+		// length = calculateLength(FAs);
+		// doubleBonds = calculateDoubleBonds(FAs);
 		
-	}
+		}
 	
 	
 	// Define getters and setters

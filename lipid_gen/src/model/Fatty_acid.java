@@ -1,15 +1,15 @@
 package model;
 
 public class Fatty_acid {
-int ncarbon;
+/*int ncarbon;
+int double_bonds; Is it necessary?*/
 Formula formula;
+public Fatty_acid(int C,int double_bonds) {
+	
+	this.formula=new Formula(C, double_bonds);
+	
+}
 
-	public int getNcarbon() {
-		return ncarbon;
-	}
-	public void setNcarbon(int ncarbon) {
-		this.ncarbon = ncarbon;
-	}
 	public Formula getFormula() {
 		return formula;
 	}

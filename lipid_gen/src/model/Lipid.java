@@ -35,24 +35,24 @@ public class Lipid {
 
 	}
 
-	/*public Lipid(Fatty_acid fa) throws NullPointerException {
+	public Lipid(Fatty_acid fa) throws NullPointerException {
 		if (fa == null) {
 			throw new NullPointerException();
 		}
 
-		// formula = calculateLipidFormula(skeleton, FAs)
+		formula = fa.getFormula();
 		mass = 0d;
 		name = "";
 		length = 0;
 		doubleBonds = 0;
 		abbvName = "";
 		// Method to calculate the mass
-		// mass = calculateMass(Formula);
+	//	 mass = calculateMass(formula);
 		// name = calculateName(Skeleton, FAs);
 		// length = calculateLength(FAs);
 		// doubleBonds = calculateDoubleBonds(FAs);
 
-	}*/
+	}
 
 	// Define getters and setters
 	public Formula getFormula() {
@@ -113,5 +113,10 @@ public class Lipid {
 		return ske_formula;
 
 	}
+//	public Double calculateMass(Formula formula) {
+		
+		
+		
+	
 
 }

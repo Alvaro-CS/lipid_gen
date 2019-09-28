@@ -1,10 +1,10 @@
 package model;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import com.sun.javafx.css.CalculatedValue;
+
+import utilities.Periodic_table;
 
 public class Lipid {
 	// Define attributes
@@ -22,13 +22,11 @@ public class Lipid {
 		}
 
 		formula = calculateLipidFormula(skeleton, FAs);
-		mass = 0d;
 		name = "";
 		length = 0;
 		doubleBonds = 0;
 		abbvName = "";
-		// Method to calculate the mass
-		// mass = calculateMass(Formula);
+		 mass = calculateMass(formula);
 		// name = calculateName(Skeleton, FAs);
 		// length = calculateLength(FAs);
 		// doubleBonds = calculateDoubleBonds(FAs);
@@ -41,13 +39,12 @@ public class Lipid {
 		}
 
 		formula = fa.getFormula();
-		mass = 0d;
 		name = "";
 		length = 0;
 		doubleBonds = 0;
 		abbvName = "";
-		// Method to calculate the mass
-	//	 mass = calculateMass(formula);
+
+		 mass = calculateMass(formula);
 		// name = calculateName(Skeleton, FAs);
 		// length = calculateLength(FAs);
 		// doubleBonds = calculateDoubleBonds(FAs);
@@ -113,10 +110,29 @@ public class Lipid {
 		return ske_formula;
 
 	}
-//	public Double calculateMass(Formula formula) {
+	/**
+	 * <strong>calculateMass</strong>
+	 
+	 * This method takes the hash-map of the elements of the lipid and then adds the masses of all atom types by multiplying 
+	 * the number of atoms with it's correspondent isotopic mass
+	 * @param formula of the lipid
+	 * @return Returns the mass of the lipid.
+	 */
+	public Double calculateMass(Formula formula) {
+	Double lipid_mass=0d;
+		for (Map.Entry<Element, Integer> entry_lip : formula.getMAPFORMULA().entrySet()) {
+			for (Map.Entry<Element, Double> entry_PT :Periodic_table.MAPELEMENTS.entrySet()) {
+				if(entry_lip.getKey().equals(entry_PT.getKey())) {
+					lipid_mass=lipid_mass+entry_lip.getValue()*entry_PT.getValue();
+				}
+			
 		
 		
 		
-	
+	}
+			}
+		return lipid_mass;
 
+}
+	
 }

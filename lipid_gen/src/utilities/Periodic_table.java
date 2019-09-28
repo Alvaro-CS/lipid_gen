@@ -9,8 +9,6 @@ import model.Element;
 
 public class Periodic_table {
 	
-	
-
 	public static final Map<Element, Double> MAPELEMENTS = new HashMap<Element, Double>();
 
     static {

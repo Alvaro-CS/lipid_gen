@@ -23,6 +23,23 @@ class LipidTest {
 			assertTrue(Boolean.TRUE);
 		}	
 	}
+	@Test
+	void testLipid8Mass() {
+		
+		Fatty_acid fa=new Fatty_acid(8, 0);
+		Lipid li=new Lipid(fa);
+		Double mass=li.getMass();
+		if(mass==144.11503d)assertTrue(Boolean.TRUE); else fail("Mass doesn't match");
+	}
+	
+	@Test
+	void testLipidDBMass() {
+		
+		Fatty_acid fa=new Fatty_acid(15, 4);
+		Lipid li=new Lipid(fa);
+		Double mass=li.getMass();
+		if(mass==234.16198d)assertTrue(Boolean.TRUE); else fail("Mass doesn't match");
+	}
 	
 	
 

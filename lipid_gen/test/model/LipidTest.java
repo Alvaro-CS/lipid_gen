@@ -4,6 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import org.junit.jupiter.api.Test;
 
+import Exceptions.Fatty_acidCreationException;
+
 class LipidTest {
 
 	@Test
@@ -24,7 +26,7 @@ class LipidTest {
 		}	
 	}
 	@Test
-	void testLipid8Mass() {
+	void testLipid8Mass() throws Fatty_acidCreationException {
 		
 		Fatty_acid fa=new Fatty_acid(8, 0);
 		Lipid li=new Lipid(fa);
@@ -33,7 +35,7 @@ class LipidTest {
 	}
 	
 	@Test
-	void testLipidDBMass() {
+	void testLipidDBMass() throws Fatty_acidCreationException {
 		
 		Fatty_acid fa=new Fatty_acid(15, 4);
 		Lipid li=new Lipid(fa);

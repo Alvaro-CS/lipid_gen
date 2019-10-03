@@ -7,7 +7,9 @@ import utilities.Periodic_table;
 
 public class Lipid {
 	private final Double mass;
-	Formula formula;
+	private final Formula formula;
+	/*private Skeleton skeleton;
+	private List<Fatty_acid> FAs;*/ //TODO why if 1-n, n-m, don't we need to add this as atributes. Is the formula the only important attached class?
 	private final String name;
 	private final String abbvName;
 	private final int length;
@@ -53,10 +55,6 @@ public class Lipid {
 		return formula;
 	}
 
-	public void setFormula(Formula formula) {
-		this.formula = formula;
-	}
-
 	public Double getMass() {
 		return mass;
 	}
@@ -77,10 +75,7 @@ public class Lipid {
 		return doubleBonds;
 	}
 
-	/**
-	 * <strong>calculateLipidFormula</strong>
-	 * 
-	 * This method takes the hash-maps of the skeleton and the list of Fatty Acids,
+	/**This method takes the hash-maps of the skeleton and the list of Fatty Acids,
 	 * and then adds into a common map all the elements. It also eliminates 2
 	 * hydrogen atoms/Fatty Acid
 	 * 
@@ -109,10 +104,7 @@ public class Lipid {
 
 	}
 
-	/**
-	 * <strong>calculateMass</strong>
-	 * 
-	 * This method takes the hash-map of the elements of the lipid and then adds the
+	/**This method takes the hash-map of the elements of the lipid and then adds the
 	 * masses of all atom types by multiplying the number of atoms with it's
 	 * correspondent isotopic mass
 	 * 
@@ -132,10 +124,23 @@ public class Lipid {
 		return lipid_mass;
 
 	}
-	/*
-	 * public String calculateName(Skeleton ske,List<Fatty_acid> FAs) {
-	 * name=ske.getske_type; int length; for(int n=0;n<FAs.size();n++) length=
-	 * name=name+"("+)"; {} return name; }
+	/**This method creates the name of the lipid by concatenating the name of the skeleton, followed 
+	 * by the length of each Fatty Acid with it's double bonds as follows:<br>
+	 * Skeleton_name(Length FA1:double bonds FA1/Length FA2:double bonds FA2/.../Length FA(N):double bonds FA(N))
+	 * @param The skeleton and the list of FAs of the lipid
+	 * @return Returns the name of the lipid.
 	 */
-
+	public String calculateName(Skeleton ske, List<Fatty_acid> FAs) {
+		String lipid_name = ske.getSke_type().toString() + "(";
+		int length, d_bonds;
+		for (int n = 0; n < FAs.size(); n++) {
+			length = FAs.get(n).getC();
+			d_bonds = FAs.get(n).getC();
+			lipid_name += length + ":" + d_bonds;
+			if (n < FAs.size() - 1)
+				lipid_name += "/";
+		}
+		lipid_name += ")";
+		return lipid_name;
+	}
 }

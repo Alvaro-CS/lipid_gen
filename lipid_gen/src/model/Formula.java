@@ -6,7 +6,7 @@ import java.util.Map;
 public class Formula {
 	public Map<Element, Integer> MAPFORMULA = new HashMap<Element, Integer>();
 
-	// TODO String name; needed?
+	// TODO String name convertion
 	/**
 	 * <strong>Constructor for FA</strong> Creates the formula of a Fatty Acid
 	 * 

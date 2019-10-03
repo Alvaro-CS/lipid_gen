@@ -5,11 +5,14 @@ import java.util.Map;
 
 import utilities.Periodic_table;
 
+//TODO @param negrita
 public class Lipid {
 	private final Double mass;
 	private final Formula formula;
-	/*private Skeleton skeleton;
-	private List<Fatty_acid> FAs;*/ //TODO why if 1-n, n-m, don't we need to add this as atributes. Is the formula the only important attached class?
+	/*
+	 * private Skeleton skeleton; private List<Fatty_acid> FAs;
+	 */ // TODO why if 1-n, n-m, don't we need to add this as atributes. Is the formula
+		// the only important attached class?
 	private final String name;
 	private final String abbvName;
 	private final int length;
@@ -21,14 +24,11 @@ public class Lipid {
 		}
 
 		formula = calculateLipidFormula(skeleton, FAs);
-		name = "";
-		length = 0;
-		doubleBonds = 0;
-		abbvName = "";
+		abbvName = calculateAbbvName(skeleton, FAs);
 		mass = calculateMass(formula);
-		// name = calculateName(skeleton, FAs);
-		// length = calculateLength(FAs);
-		// doubleBonds = calculateDoubleBonds(FAs);
+		name = calculateName(skeleton, FAs);
+		length = calculateLength(FAs);
+		doubleBonds = calculateDoubleBonds(FAs);
 
 	}
 
@@ -75,7 +75,8 @@ public class Lipid {
 		return doubleBonds;
 	}
 
-	/**This method takes the hash-maps of the skeleton and the list of Fatty Acids,
+	/**
+	 * This method takes the hash-maps of the skeleton and the list of Fatty Acids,
 	 * and then adds into a common map all the elements. It also eliminates 2
 	 * hydrogen atoms/Fatty Acid
 	 * 
@@ -104,7 +105,8 @@ public class Lipid {
 
 	}
 
-	/**This method takes the hash-map of the elements of the lipid and then adds the
+	/**
+	 * This method takes the hash-map of the elements of the lipid and then adds the
 	 * masses of all atom types by multiplying the number of atoms with it's
 	 * correspondent isotopic mass
 	 * 
@@ -124,9 +126,14 @@ public class Lipid {
 		return lipid_mass;
 
 	}
-	/**This method creates the name of the lipid by concatenating the name of the skeleton, followed 
-	 * by the length of each Fatty Acid with it's double bonds as follows:<br>
-	 * Skeleton_name(Length FA1:double bonds FA1/Length FA2:double bonds FA2/.../Length FA(N):double bonds FA(N))
+
+	/**
+	 * This method creates the name of the lipid by concatenating the name of the
+	 * skeleton, followed by the length of each Fatty Acid with it's double bonds as
+	 * follows:<br>
+	 * Skeleton_name(Length FA1:double bonds FA1/Length FA2:double bonds
+	 * FA2/.../Length FA(N):double bonds FA(N))
+	 * 
 	 * @param The skeleton and the list of FAs of the lipid
 	 * @return Returns the name of the lipid.
 	 */
@@ -143,22 +150,52 @@ public class Lipid {
 		lipid_name += ")";
 		return lipid_name;
 	}
-	
-	/**This method creates the abbreviate name of the lipid by indicating the number of carbon atoms 
-	 * of the Fatty Acids and double bonds as follows:<br>
-	 * Skeleton_name(Sum of carbon atoms of all Fatty Acids : Sum of double bonds of all Fatty Acids)
+
+	/**
+	 * This method creates the abbreviate name of the lipid by indicating the number
+	 * of carbon atoms of the Fatty Acids and double bonds as follows:<br>
+	 * Skeleton_name(Sum of carbon atoms of all Fatty Acids : Sum of double bonds of
+	 * all Fatty Acids)
+	 * 
 	 * @param The skeleton and the list of FAs of the lipid.
 	 * @return Returns the abbreviate name of the lipid.
 	 */
-	
+
 	public static String calculateAbbvName(Skeleton ske, List<Fatty_acid> FAs) {
-		int length=0, d_bonds=0;
-		for (int n = 0; n < FAs.size(); n++) {
-			length+=FAs.get(n).getC(); 
-			d_bonds+=FAs.get(n).getDouble_bonds(); 
-			}
-		String abbv_name = ske.getSke_type().toString() + "("+length+":"+d_bonds+")";
+		int length = calculateLength(FAs);
+		int d_bonds = calculateDoubleBonds(FAs);
+
+		String abbv_name = ske.getSke_type().toString() + "(" + length + ":" + d_bonds + ")";
 
 		return abbv_name;
+	}
+
+	/**
+	 * This method calculates the sum of the length of Fatty Acid chains
+	 * 
+	 * @param The list of Fatty Acids.
+	 * @return Returns the length of Fatty Acid chains.
+	 */
+
+	public static int calculateLength(List<Fatty_acid> FAs) {
+		int length = 0;
+		for (int n = 0; n < FAs.size(); n++) {
+			length += FAs.get(n).getC();
+		}
+		return length;
+	}
+
+	/**
+	 * This method calculates the total number of double bonds of Fatty Acid chains
+	 * 
+	 * @param The list of Fatty Acids.
+	 * @return Returns the double bonds of Fatty Acid chains.
+	 */
+	public static int calculateDoubleBonds(List<Fatty_acid> FAs) {
+		int d_bonds = 0;
+		for (int n = 0; n < FAs.size(); n++) {
+			d_bonds += FAs.get(n).getDouble_bonds();
+		}
+		return d_bonds;
 	}
 }

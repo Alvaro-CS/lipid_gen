@@ -81,7 +81,7 @@ public class Lipid {
 	 * 
 	 * @return Returns the formula of the lipid.
 	 */
-	public Formula calculateLipidFormula(Skeleton ske, List<Fatty_acid> FAs) {
+	public static Formula calculateLipidFormula(Skeleton ske, List<Fatty_acid> FAs) {
 		Formula ske_formula = ske.getFormula();
 		for (int n = 0; n < FAs.size(); n++) {
 			Formula FA_formula = FAs.get(n).getFormula();
@@ -111,7 +111,7 @@ public class Lipid {
 	 * @param formula of the lipid
 	 * @return Returns the mass of the lipid.
 	 */
-	public Double calculateMass(Formula formula) {
+	public static Double calculateMass(Formula formula) {
 		Double lipid_mass = 0d;
 		for (Map.Entry<Element, Integer> entry_lip : formula.getMAPFORMULA().entrySet()) {
 			for (Map.Entry<Element, Double> entry_PT : Periodic_table.MAPELEMENTS.entrySet()) {
@@ -130,7 +130,7 @@ public class Lipid {
 	 * @param The skeleton and the list of FAs of the lipid
 	 * @return Returns the name of the lipid.
 	 */
-	public String calculateName(Skeleton ske, List<Fatty_acid> FAs) {
+	public static String calculateName(Skeleton ske, List<Fatty_acid> FAs) {
 		String lipid_name = ske.getSke_type().toString() + "(";
 		int length, d_bonds;
 		for (int n = 0; n < FAs.size(); n++) {
@@ -142,5 +142,23 @@ public class Lipid {
 		}
 		lipid_name += ")";
 		return lipid_name;
+	}
+	
+	/**This method creates the abbreviate name of the lipid by indicating the number of carbon atoms 
+	 * of the Fatty Acids and double bonds as follows:<br>
+	 * Skeleton_name(Sum of carbon atoms of all Fatty Acids : Sum of double bonds of all Fatty Acids)
+	 * @param The skeleton and the list of FAs of the lipid.
+	 * @return Returns the abbreviate name of the lipid.
+	 */
+	
+	public static String calculateAbbvName(Skeleton ske, List<Fatty_acid> FAs) {
+		int length=0, d_bonds=0;
+		for (int n = 0; n < FAs.size(); n++) {
+			length+=FAs.get(n).getC(); 
+			d_bonds+=FAs.get(n).getDouble_bonds(); 
+			}
+		String abbv_name = ske.getSke_type().toString() + "("+length+":"+d_bonds+")";
+
+		return abbv_name;
 	}
 }

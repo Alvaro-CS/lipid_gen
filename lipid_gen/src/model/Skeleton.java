@@ -1,15 +1,23 @@
 package model;
 
 public class Skeleton {
-Formula formula;
 
+	private final Ske_type ske_type ;
+	private final Formula formula;
+	private final Double mass;
 
-public Formula getFormula() {
-	return formula;
-}
+	public Skeleton(Ske_type ske_type) {
+		formula = null;
+		mass = null;
+		this.ske_type = ske_type;
+	}
 
-public void setFormula(Formula formula) {
-	this.formula = formula;
-}
+	public Formula getFormula() {
+		return formula;
+	}
+
+	public Double getMass() {
+		return mass;
+	}
 
 }

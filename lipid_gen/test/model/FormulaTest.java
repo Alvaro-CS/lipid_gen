@@ -10,7 +10,7 @@ class FormulaTest {
 	void testFormulaConstructor() {
 		
 			Formula formula = new Formula("njnjk");
-			System.out.println(formula.getFormulaData("CH6L2ooP2"));
+			System.out.println(formula.getFormulaData("CH6L2oo(CH)2P2"));
 			assertTrue(Boolean.TRUE);
 	
 	}

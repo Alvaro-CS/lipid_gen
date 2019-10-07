@@ -28,9 +28,8 @@ public class Formula {
 //Put all methods here
 	}
 
-	public String[] getFormulaData(String INPUT) {// TODO primer numero que acompaña no puede ser 0. Anterior incorpora
-													// numeros de 2 cifras solo
-		Matcher matcher = Pattern.compile("[A-Z]([a-z]?[0-9]*)?|[(]([A-Z]([a-z]|[0-9]*)?)*[)][0-9]*").matcher(INPUT);
+	public ArrayList<String> getFormulaData(String INPUT) {// TODO (CH)2 no coge el 2???
+		Matcher matcher = Pattern.compile("[A-Z]([a-z]?([1-9][0-9]*)*)?|[(]([A-Z]([a-z]|([1-9][0-9]*)*)?)*[)]([1-9][0-9]*)*\r\n").matcher(INPUT);
 		ArrayList<String> result = new ArrayList<String>();
 		if (matcher.find()) {
 			result.add(matcher.group());
@@ -40,12 +39,12 @@ public class Formula {
 			}
 		}
 
-		return (String[]) result.toArray();
+		return result;
 	}
 
-	public void createMapFormula(String[] result) {// TODO Parantesis multi. Repeticion de elementos. Varios numeros seguidos...
+	public void createMapFormula(ArrayList<String> result_list) {// TODO Parantesis multi. Repeticion de elementos. Varios numeros seguidos...
 		// TODO Excepciones: elemento no valido
-		
+		String[] result=(String[]) result_list.toArray();
 		for (int n = 0; n < result.length; n++) {
 			int counter=0;
 			if (result[n].chars().allMatch(Character::isAlphabetic)) {

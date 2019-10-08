@@ -4,11 +4,14 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import utilities.Periodic_table;
+
 public class Formula {
-	public Map<Element, Integer> MAPFORMULA = new HashMap<Element, Integer>();
+	private final Map<Element, Integer> mapformula = new HashMap<Element, Integer>();
 
 	// TODO String name convertion
 	/**
@@ -16,18 +19,51 @@ public class Formula {
 	 * 
 	 * @param Carbon_atoms
 	 * @param Double_bonds
-	 * 
+	 * @throws Exception 
 	 */
-	public Formula(int C, int double_bonds) {
-		MAPFORMULA.put(Element.C, C);
-		MAPFORMULA.put(Element.H, 2 * C - (double_bonds * 2));
-		MAPFORMULA.put(Element.O, 2);
+	public Formula(int C, int double_bonds) throws Exception {
+		add(Element.C, C);
+		add(Element.H, 2 * C - (double_bonds * 2));
+		add(Element.O, 2);
 	}
 
 	public Formula(String formula) {
 //Put all methods here
 	}
 
+	public Formula(Formula f1) throws Exception {
+		for(Element e : f1.getElements()) {
+			add(e, f1.getElementQuantity(e));
+		}
+	}
+	
+	public void add(Element e,int num) throws Exception{
+		if(num<=0)
+			throw new Exception();
+		if(mapformula.containsKey(e)) {
+			mapformula.put(e, num + mapformula.get(e));
+		}
+		else {
+		mapformula.put(e, num);
+		}
+	}
+	
+	public void remove(Element e, int num) {
+		//Comprobar si elemento en MAPFORMULA
+		//Comprobar si suficientes elementos para eliminar
+		//Si elemento finalmente queda a 0, eliminar la clave del mapa.
+		//TODO Implementar este método
+	}
+	
+	public Set<Element> getElements(){
+		return mapformula.keySet();
+	}
+
+	
+	public int getElementQuantity(Element c) {
+		return mapformula.get(c);
+	}
+	
 	public ArrayList<String> getFormulaData(String INPUT) {// TODO (CH)2 no coge el 2???
 		Matcher matcher = Pattern.compile("[A-Z]([a-z]?([1-9][0-9]*)*)?|[(]([A-Z]([a-z]|([1-9][0-9]*)*)?)*[)]([1-9][0-9]*)*\r\n").matcher(INPUT);
 		ArrayList<String> result = new ArrayList<String>();
@@ -48,24 +84,16 @@ public class Formula {
 		for (int n = 0; n < result.length; n++) {
 			int counter=0;
 			if (result[n].chars().allMatch(Character::isAlphabetic)) {
-				MAPFORMULA.put(Element.valueOf(result[n]), 1);
+				mapformula.put(Element.valueOf(result[n]), 1);
 			}
 			if (result[n].chars().allMatch(Character::isDigit)) {
 
-				MAPFORMULA.put(Element.valueOf(result[n - 1]), Integer.parseInt(result[n]) - 1);
+				mapformula.put(Element.valueOf(result[n - 1]), Integer.parseInt(result[n]));
 
 			}
 
 		}
 
 	}
-
-	public Map<Element, Integer> getMAPFORMULA() {
-		return MAPFORMULA;
+	
 	}
-
-	public void setMAPFORMULA(Map<Element, Integer> mAPFORMULA) {
-		MAPFORMULA = mAPFORMULA;
-	}
-
-}

@@ -15,7 +15,7 @@ class LipidTest {
 	}
 	
 	@Test
-	void testLipidConstructorNull() {
+	void testLipidConstructorNull() throws Exception {
 		Lipid expectedResult = null;
 		try {
 			Lipid result = new Lipid(null,null);
@@ -26,7 +26,7 @@ class LipidTest {
 		}	
 	}
 	@Test
-	void testLipid8Mass() throws Fatty_acidCreationException {
+	void testLipid8Mass() throws Exception {
 		
 		Fatty_acid fa=new Fatty_acid(8, 0);
 		Lipid li=new Lipid(fa);
@@ -35,7 +35,7 @@ class LipidTest {
 	}
 	
 	@Test
-	void testLipidDBMass() throws Fatty_acidCreationException {
+	void testLipidDBMass() throws Exception {
 		
 		Fatty_acid fa=new Fatty_acid(15, 4);
 		Lipid li=new Lipid(fa);

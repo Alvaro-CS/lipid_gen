@@ -1,8 +1,7 @@
 package model;
 
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
 
 import utilities.Periodic_table;
 
@@ -10,9 +9,10 @@ import utilities.Periodic_table;
 public class Lipid {
 	private final Double mass;
 	private final Formula formula;
-	/*
-	 * private Skeleton skeleton; private List<Fatty_acid> FAs;
-	 */ // TODO why if 1-n, n-m, don't we need to add this as atributes. Is the formula
+
+	private final Skeleton skeleton;
+	private final List<Fatty_acid> FAs;
+	// TODO why if 1-n, n-m, don't we need to add this as atributes. Is the formula
 	// the only important attached class?
 	private final String name;
 	private final String abbvName;
@@ -30,6 +30,8 @@ public class Lipid {
 		name = calculateName(skeleton, FAs);
 		length = calculateLength(FAs);
 		doubleBonds = calculateDoubleBonds(FAs);
+		this.skeleton = skeleton;
+		this.FAs = FAs;
 
 	}
 
@@ -45,6 +47,9 @@ public class Lipid {
 		abbvName = "";
 
 		mass = calculateMass(formula);
+		this.FAs = new LinkedList<Fatty_acid>();
+		this.FAs.add(fa);
+		this.skeleton = null;
 		// name = calculateName(Skeleton, FAs);
 		// length = calculateLength(FAs);
 		// doubleBonds = calculateDoubleBonds(FAs);
@@ -76,6 +81,14 @@ public class Lipid {
 		return doubleBonds;
 	}
 
+	public Skeleton getSkeleton() {
+		return skeleton;
+	}
+
+	public List<Fatty_acid> getFAs() {
+		return FAs;
+	}
+
 	/**
 	 * This method takes the hash-maps of the skeleton and the list of Fatty Acids,
 	 * and then adds into a common map all the elements. It also eliminates 2
@@ -94,8 +107,12 @@ public class Lipid {
 				lipid_formula.add(e, FA_formula.getElementQuantity(e));
 			}
 			lipid_formula.remove(Element.H, 2);
-			ske.getFormula().remove(Element.H, 1);
-			fa.getFormula().remove(Element.H, 1);// TODO comentar a Alberto
+			/*
+			 * 
+			 * ske.getFormula().remove(Element.H, 1); fa.getFormula().remove(Element.H,
+			 * 1);// TODO comentar a Alberto
+			 * 
+			 */
 
 			/*
 			 * for (Map.Entry<Element, Integer> entry_ske :
@@ -138,6 +155,12 @@ public class Lipid {
 
 	}
 
+	public static String calculateName(Fatty_acid FA) {
+		List<Fatty_acid> FAs = new LinkedList<Fatty_acid>();
+		FAs.add(FA);
+		return calculateName(null, FAs);
+	}
+
 	/**
 	 * This method creates the name of the lipid by concatenating the name of the
 	 * skeleton, followed by the length of each Fatty Acid with it's double bonds as
@@ -149,7 +172,12 @@ public class Lipid {
 	 * @return Returns the name of the lipid.
 	 */
 	public static String calculateName(Skeleton ske, List<Fatty_acid> FAs) {
-		String lipid_name = ske.getSke_type().toString() + "(";
+		String lipid_name;
+		if (ske != null) {
+			lipid_name = ske.getSke_type().toString() + "(";
+		} else {
+			lipid_name = "FA(";
+		}
 		int length, d_bonds;
 		for (int n = 0; n < FAs.size(); n++) {
 			length = FAs.get(n).getC();

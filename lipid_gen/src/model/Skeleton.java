@@ -2,11 +2,11 @@ package model;
 
 public class Skeleton {
 
-	private final Ske_type ske_type ;
+	private final Ske_type ske_type;
 	private final Formula formula;
 	private final Double mass;
 
-	public Skeleton(Formula formula,Ske_type ske_type) {
+	public Skeleton(Formula formula, Ske_type ske_type) {
 		this.formula = formula;
 		mass = null;
 		this.ske_type = ske_type;

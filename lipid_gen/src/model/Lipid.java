@@ -5,15 +5,11 @@ import java.util.List;
 
 import utilities.Periodic_table;
 
-//TODO @param negrita
 public class Lipid {
 	private final Double mass;
 	private final Formula formula;
-
 	private final Skeleton skeleton;
 	private final List<Fatty_acid> FAs;
-	// TODO why if 1-n, n-m, don't we need to add this as atributes. Is the formula
-	// the only important attached class?
 	private final String name;
 	private final String abbvName;
 	private final int length;
@@ -41,22 +37,17 @@ public class Lipid {
 		}
 
 		formula = fa.getFormula();
-		name = "";
-		length = 0;
-		doubleBonds = 0;
-		abbvName = "";
-
+		abbvName = calculateName(fa);
+		name = calculateName(fa);
 		mass = calculateMass(formula);
+		length = fa.getC();
+		doubleBonds = fa.getDouble_bonds();
 		this.FAs = new LinkedList<Fatty_acid>();
 		this.FAs.add(fa);
 		this.skeleton = null;
-		// name = calculateName(Skeleton, FAs);
-		// length = calculateLength(FAs);
-		// doubleBonds = calculateDoubleBonds(FAs);
 
 	}
 
-	// Define getters and setters
 	public Formula getFormula() {
 		return formula;
 	}
@@ -94,7 +85,7 @@ public class Lipid {
 	 * and then adds into a common map all the elements. It also eliminates 2
 	 * hydrogen atoms/Fatty Acid
 	 * 
-	 * @return Returns the formula of the lipid.
+	 * @return The formula of the lipid.
 	 * @throws Exception
 	 */
 	public static Formula calculateLipidFormula(Skeleton ske, List<Fatty_acid> FAs) throws Exception {
@@ -108,9 +99,8 @@ public class Lipid {
 			}
 			lipid_formula.remove(Element.H, 2);
 			/*
-			 * 
-			 * ske.getFormula().remove(Element.H, 1); fa.getFormula().remove(Element.H,
-			 * 1);// TODO comentar a Alberto
+			 * No, because we want to reuse the FAs. ske.getFormula().remove(Element.H, 1);
+			 * fa.getFormula().remove(Element.H, 1);
 			 * 
 			 */
 
@@ -155,6 +145,13 @@ public class Lipid {
 
 	}
 
+	/**
+	 * This method creates the name of the lipid (a Fatty Acid). It creates a list
+	 * with the FA and calls the generic method for doing so.
+	 * 
+	 * @param FA The future lipid (Fatty Acid)
+	 * @return The name of the lipid.
+	 */
 	public static String calculateName(Fatty_acid FA) {
 		List<Fatty_acid> FAs = new LinkedList<Fatty_acid>();
 		FAs.add(FA);
@@ -166,27 +163,32 @@ public class Lipid {
 	 * skeleton, followed by the length of each Fatty Acid with it's double bonds as
 	 * follows:<br>
 	 * Skeleton_name(Length FA1:double bonds FA1/Length FA2:double bonds
-	 * FA2/.../Length FA(N):double bonds FA(N))
+	 * FA2/.../Length FA(N):double bonds FA(N)) <br>
+	 * If the lipid is just a Fatty Acid, the name is just the number of carbons
+	 * with double bonds.
 	 * 
-	 * @param The skeleton and the list of FAs of the lipid
-	 * @return Returns the name of the lipid.
+	 * @param ske The skeleton of the lipid.
+	 * @param FAs The list of FAs of the lipid.
+	 * @return The name of the lipid.
 	 */
 	public static String calculateName(Skeleton ske, List<Fatty_acid> FAs) {
 		String lipid_name;
-		if (ske != null) {
-			lipid_name = ske.getSke_type().toString() + "(";
+		if (ske == null) {
+			lipid_name = "FA(" + FAs.get(0).getC() + ":" + FAs.get(0).getDouble_bonds() + ")";
+
 		} else {
-			lipid_name = "FA(";
+			lipid_name = ske.getSke_type().toString() + "(";
+
+			int length, d_bonds;
+			for (int n = 0; n < FAs.size(); n++) {
+				length = FAs.get(n).getC();
+				d_bonds = FAs.get(n).getC();
+				lipid_name += length + ":" + d_bonds;
+				if (n < FAs.size() - 1)
+					lipid_name += "/";
+			}
+			lipid_name += ")";
 		}
-		int length, d_bonds;
-		for (int n = 0; n < FAs.size(); n++) {
-			length = FAs.get(n).getC();
-			d_bonds = FAs.get(n).getC();
-			lipid_name += length + ":" + d_bonds;
-			if (n < FAs.size() - 1)
-				lipid_name += "/";
-		}
-		lipid_name += ")";
 		return lipid_name;
 	}
 
@@ -196,7 +198,8 @@ public class Lipid {
 	 * Skeleton_name(Sum of carbon atoms of all Fatty Acids : Sum of double bonds of
 	 * all Fatty Acids)
 	 * 
-	 * @param The skeleton and the list of FAs of the lipid.
+	 * @param ske The skeleton of the lipid.
+	 * @param FAs The list of FAs of the lipid.
 	 * @return Returns the abbreviate name of the lipid.
 	 */
 

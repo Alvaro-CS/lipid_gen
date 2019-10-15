@@ -1,6 +1,6 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
@@ -8,11 +8,12 @@ class FormulaTest {
 
 	@Test
 	void testFormulaConstructor() {
-		
-			Formula formula = new Formula("njnjk");
-			System.out.println(formula.getFormulaData("Ca3H6L2oo(CH)2P2"));
-			assertTrue(Boolean.TRUE);
-	
+		String regex = "Ca3H2";
+		Formula formula = new Formula("njnjk");
+		System.out.println(formula.isValidFormula(regex));
+		System.out.println(formula.getFormulaData(regex));
+		assertTrue(Boolean.TRUE);
+
 	}
 
 }

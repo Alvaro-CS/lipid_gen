@@ -59,9 +59,20 @@ public class Formula {
 		return mapformula.get(c);
 	}
 
+	public static boolean isValidFormula(String INPUT) {
+//TODO also check if element exists
+		Matcher matcher = Pattern
+				.compile("[A-Z]([a-z]?([1-9][0-9]*)*)?|[(]([A-Z]([a-z]|([1-9][0-9]*)*)?)*[)]([1-9][0-9]*)*\r\n")
+				.matcher(INPUT);
+		return matcher.matches();
+	}
+
 	/**
+	 * This method gets the data of the formula and creates a list with the
+	 * elements.
+	 * 
 	 * @param INPUT string with a chemical formula
-	 * @return
+	 * @return A list with the elements
 	 */
 	public static ArrayList<String> getFormulaData(String INPUT) {// TODO (CH)2 no coge el 2???
 		Matcher matcher = Pattern
@@ -79,10 +90,8 @@ public class Formula {
 		return result;
 	}
 
-//TODO isvalidformula: elementos no existentes. cosas que no sigan el Regex
 	public void createMapFormula(ArrayList<String> result_list) {// TODO Parantesis multi. Repeticion de elementos.
 																	// Varios numeros seguidos...
-		// TODO Excepciones: elemento no valido
 		String[] result = (String[]) result_list.toArray();
 		for (int n = 0; n < result.length; n++) {
 			int counter = 0;

@@ -8,12 +8,17 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Formula {
+	private static final String formulaPatternSkipParenthesis = "(?<!\\()[A-Z]([a-z]?([1-9][0-9]*)*)?(?![A-Za-z0-9]*[\\)])";
+	private static final String formulaPatternParenthesisGroups = "[(]([A-Z]([a-z]?([1-9][0-9]*)*)?)*[)]([1-9][0-9]*)*";
+	private static final Pattern patternSP = Pattern.compile(formulaPatternSkipParenthesis);
+	private static final Pattern patternPG = Pattern.compile(formulaPatternParenthesisGroups);
+
 	private final Map<Element, Integer> mapformula = new HashMap<Element, Integer>();
 
 	// TODO String name convertion
 	/**
 	 * <strong>Constructor for FA</strong> Creates the formula of a Fatty Acid
-	 * 
+	 *
 	 * @param Carbon_atoms
 	 * @param Double_bonds
 	 * @throws Exception
@@ -25,7 +30,7 @@ public class Formula {
 	}
 
 	public Formula(String formula) {
-//Put all methods here
+		// Put all methods here
 	}
 
 	public Formula(Formula f1) throws Exception {
@@ -35,8 +40,9 @@ public class Formula {
 	}
 
 	public void add(Element e, int num) throws Exception {
-		if (num <= 0)
+		if (num <= 0) {
 			throw new Exception();
+		}
 		if (mapformula.containsKey(e)) {
 			mapformula.put(e, num + mapformula.get(e));
 		} else {
@@ -59,32 +65,40 @@ public class Formula {
 		return mapformula.get(c);
 	}
 
-	public static boolean isValidFormula(String INPUT) {
-//TODO also check if element exists
-		Matcher matcher = Pattern
-				.compile("[A-Z]([a-z]?([1-9][0-9]*)*)?|[(]([A-Z]([a-z]|([1-9][0-9]*)*)?)*[)]([1-9][0-9]*)*\r\n")
-				.matcher(INPUT);
-		return matcher.matches();
+	public static boolean isValidFormula(String formula) {
+		System.out.println("Fórmula a analizar: " + formula);
+		// TODO also check if element exists
+		System.out.println("Grupos encontrados (excluyendo paréntesis):");
+		Matcher matcher = patternSP.matcher(formula);
+		while (matcher.find()) {
+			System.out.println(matcher.group());
+		}
+
+		System.out.println("Grupos de paréntesis encontrados:");
+		matcher = patternPG.matcher(formula);
+		while (matcher.find()) {
+			System.out.println(matcher.group());
+		}
+
+		// Habrá que ver si con los grupos detectados se cubre toda la expresión
+		// regular. Ojo que habrá que tener en cuenta también a los que están entre
+		// paréntesis. Ambos deben cubrir todo el string de entrada.
+		return true;
 	}
 
 	/**
 	 * This method gets the data of the formula and creates a list with the
 	 * elements.
-	 * 
+	 *
 	 * @param INPUT string with a chemical formula
 	 * @return A list with the elements
 	 */
-	public static ArrayList<String> getFormulaData(String INPUT) {// TODO (CH)2 no coge el 2???
-		Matcher matcher = Pattern
-				.compile("[A-Z]([a-z]?([1-9][0-9]*)*)?|[(]([A-Z]([a-z]|([1-9][0-9]*)*)?)*[)]([1-9][0-9]*)*\r\n")
-				.matcher(INPUT);
+	public static ArrayList<String> getFormulaData(String formula) {// TODO (CH)2 no coge el 2???
+		Matcher matcher = patternSP.matcher(formula);
 		ArrayList<String> result = new ArrayList<String>();
-		if (matcher.find()) {
-			result.add(matcher.group());
 
-			while (matcher.find()) {
-				result.add(matcher.group());
-			}
+		while (matcher.find()) {
+			result.add(matcher.group());
 		}
 
 		return result;

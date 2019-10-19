@@ -65,24 +65,41 @@ public class Formula {
 		return mapformula.get(c);
 	}
 
-	public static boolean isValidFormula(String formula) {
+	public static boolean isValidFormula(String formula) { // TODO also check if element exists
+		// TODO comment souts
 		System.out.println("Fórmula a analizar: " + formula);
-		// TODO also check if element exists
+		char[] formulaChecker = formula.toCharArray();
+		System.out.println(formulaChecker);
 		System.out.println("Grupos encontrados (excluyendo paréntesis):");
 		Matcher matcher = patternSP.matcher(formula);
+
 		while (matcher.find()) {
 			System.out.println(matcher.group());
-		}
 
+			System.out.println(matcher.start());
+			System.out.println(matcher.end());
+			for (int n = matcher.start(); n < matcher.end(); n++) {
+				formulaChecker[n] = '\0';
+
+			}
+		}
 		System.out.println("Grupos de paréntesis encontrados:");
 		matcher = patternPG.matcher(formula);
 		while (matcher.find()) {
 			System.out.println(matcher.group());
-		}
+			System.out.println(matcher.start());
+			System.out.println(matcher.end());
+			for (int n = matcher.start(); n < matcher.end(); n++) {
+				formulaChecker[n] = '\0';
 
-		// Habrá que ver si con los grupos detectados se cubre toda la expresión
-		// regular. Ojo que habrá que tener en cuenta también a los que están entre
-		// paréntesis. Ambos deben cubrir todo el string de entrada.
+			}
+
+		}
+		System.out.println(formulaChecker);
+		for (int n = 0; n < formulaChecker.length; n++) {
+			if (formulaChecker[n] != '\0')
+				return false;
+		}
 		return true;
 	}
 
@@ -93,7 +110,7 @@ public class Formula {
 	 * @param INPUT string with a chemical formula
 	 * @return A list with the elements
 	 */
-	public static ArrayList<String> getFormulaData(String formula) {// TODO (CH)2 no coge el 2???
+	public static ArrayList<String> getFormulaData(String formula) {
 		Matcher matcher = patternSP.matcher(formula);
 		ArrayList<String> result = new ArrayList<String>();
 

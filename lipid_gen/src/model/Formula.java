@@ -78,7 +78,7 @@ public class Formula {
 	 * @param formula string with a chemical formula
 	 * @return true/false depending if the formula is valid or not
 	 */
-	public static boolean isValidFormula(String formula) { // TODO also check if element exists
+	public static boolean isValidFormula(String formula) {
 		// TODO comment souts
 		System.out.println("Fórmula a analizar: " + formula);
 		char[] formulaChecker = formula.toCharArray();
@@ -115,27 +115,45 @@ public class Formula {
 		}
 		ArrayList<String> elementsSP = getFormulaSPData(formula);
 		ArrayList<String> elementsPG = getFormulaPGData(formula);
+		System.out.println(elementsSP);
 		for (int n = 0; n < elementsSP.size(); n++) {
 			// We obtain the "element" part of the string
 			matcher = patternE.matcher(elementsSP.get(n));
-			String eSP = matcher.group(1);
-			if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {
+			matcher.find();
+			String eSP = matcher.group();
+			if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {// TODO Instead of
+																						// IllegalArgumentError, check
+																						// condition?
 				return false;
 			}
-		} /*
-			 * for (int n = 0; n < elementsPG.size(); n++) { // We obtain the "element" part
-			 * of the string matcher = patternE.matcher(elementsPG.get(n));// TODO Each
-			 * parenth. constains various elements: separate String eSP = matcher.group(1);
-			 * if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {
-			 * return false; } }
-			 */
+		}
+		System.out.println(elementsPG);
+		String string_elementsPG = "";
+		for (int n = 0; n < elementsPG.size(); n++) {
+			string_elementsPG += elementsPG.get(n);
+		}
+		System.out.println(string_elementsPG);
+		ArrayList<String> separated_elementsPG = getFormulaPGElements(string_elementsPG);
+		System.out.println(separated_elementsPG);
+		for (int n = 0; n < separated_elementsPG.size(); n++) {
+			// We obtain the "element" part of the string
+			matcher = patternE.matcher(separated_elementsPG.get(n));
+			matcher.find();
+			String eSP = matcher.group();
+			System.out.println(eSP);
+			if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {// TODO Instead of
+																						// IllegalArgumentError, check
+																						// condition?
+				return false;
+			}
+		}
 
 		return true;
 	}
 
 	/**
 	 * This method gets the data without "()" of the formula and creates a list with
-	 * the elements.
+	 * the elements with its amount.
 	 *
 	 * @param INPUT string with a chemical formula
 	 * @return a list with the elements outside parentheses
@@ -152,13 +170,30 @@ public class Formula {
 
 	/**
 	 * This method gets the data inside "()" of the formula and creates a list with
-	 * the elements.
+	 * the elements and its amount.
+	 *
+	 * @param INPUT string with a chemical formula
+	 * @return a list with the elements and its amount inside parentheses
+	 */
+	public static ArrayList<String> getFormulaPGData(String formula) {
+		Matcher matcher = patternPG.matcher(formula);
+		ArrayList<String> result = new ArrayList<String>();
+
+		while (matcher.find()) {
+			result.add(matcher.group());
+		}
+		return result;
+	}
+
+	/**
+	 * This method gets the data from the parentheses of a Formula and creates a
+	 * list with only the elements inside them.
 	 *
 	 * @param INPUT string with a chemical formula
 	 * @return a list with the elements inside parentheses
 	 */
-	public static ArrayList<String> getFormulaPGData(String formula) {
-		Matcher matcher = patternPG.matcher(formula);
+	public static ArrayList<String> getFormulaPGElements(String formula) {
+		Matcher matcher = patternE.matcher(formula);
 		ArrayList<String> result = new ArrayList<String>();
 
 		while (matcher.find()) {

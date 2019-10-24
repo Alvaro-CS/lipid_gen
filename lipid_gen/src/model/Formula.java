@@ -88,9 +88,6 @@ public class Formula {
 
 		while (matcher.find()) {
 			System.out.println(matcher.group());
-
-			System.out.println(matcher.start());
-			System.out.println(matcher.end());
 			for (int n = matcher.start(); n < matcher.end(); n++) {
 				formulaChecker[n] = '\0';
 
@@ -100,8 +97,6 @@ public class Formula {
 		matcher = patternPG.matcher(formula);
 		while (matcher.find()) {
 			System.out.println(matcher.group());
-			System.out.println(matcher.start());
-			System.out.println(matcher.end());
 			for (int n = matcher.start(); n < matcher.end(); n++) {
 				formulaChecker[n] = '\0';
 
@@ -121,9 +116,11 @@ public class Formula {
 			matcher = patternE.matcher(elementsSP.get(n));
 			matcher.find();
 			String eSP = matcher.group();
-			if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {// TODO Instead of
-																						// IllegalArgumentError, check
-																						// condition?
+			try {
+				if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {
+					return false;
+				}
+			} catch (IllegalArgumentException e) {
 				return false;
 			}
 		}
@@ -141,9 +138,11 @@ public class Formula {
 			matcher.find();
 			String eSP = matcher.group();
 			System.out.println(eSP);
-			if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {// TODO Instead of
-																						// IllegalArgumentError, check
-																						// condition?
+			try {
+				if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {
+					return false;
+				}
+			} catch (IllegalArgumentException ex) {
 				return false;
 			}
 		}

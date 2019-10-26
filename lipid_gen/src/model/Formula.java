@@ -14,12 +14,16 @@ public class Formula {
 	private static final String formulaPatternParenthesisGroups = "[(]([A-Z]([a-z]?([1-9][0-9]*)*)?)*[)]([1-9][0-9]*)*";
 	private static final String formulaElement = "[A-Z][a-z]*";
 	private static final String formulaNumber = "[1-9][0-9]*";
+	private static final String formulaInsideP = "([A-Z][a-z]*[0-9]*)";
 	private static final Pattern patternSP = Pattern.compile(formulaPatternSkipParenthesis);
 	private static final Pattern patternPG = Pattern.compile(formulaPatternParenthesisGroups);
 	private static final Pattern patternE = Pattern.compile(formulaElement);
 	private static final Pattern patternN = Pattern.compile(formulaNumber);
+	private static final Pattern patternInsideP = Pattern.compile(formulaInsideP);
 
-	private final Map<Element, Integer> mapformula = new HashMap<Element, Integer>();
+	private static final Map<Element, Integer> mapformula = new HashMap<Element, Integer>(); // TODO is it okay this
+																								// static so .add
+																								// static?
 
 	// TODO String name convertion
 	/**
@@ -45,7 +49,7 @@ public class Formula {
 		}
 	}
 
-	public void add(Element e, int num) throws Exception {
+	public static void add(Element e, int num) throws Exception {
 		if (num <= 0) {
 			throw new Exception();
 		}
@@ -201,22 +205,74 @@ public class Formula {
 		return result;
 	}
 
-	public void createMapFormula(ArrayList<String> result_list) {// TODO Parantesis multi. Repeticion de elementos.
-																	// Varios numeros seguidos...
-		String[] result = (String[]) result_list.toArray();
-		for (int n = 0; n < result.length; n++) {
-			int counter = 0;
-			if (result[n].chars().allMatch(Character::isAlphabetic)) {
-				mapformula.put(Element.valueOf(result[n]), 1);
+	/**
+	 * This method gets the data in the formula and using Regular Expressions, it
+	 * gets the elements of the formula(string) and adds them into the Hashmap of
+	 * the formula.
+	 *
+	 * @param INPUT string with a chemical formula
+	 * @return void function. It adds the elements to the Hashmap "mapformula".
+	 */
+	public void createMapFormula(String formula) throws Exception {
+		Matcher matcher;
+		System.out.println(formula);
+		ArrayList<String> elementsSP = getFormulaSPData(formula);
+		ArrayList<String> elementsPG = getFormulaPGData(formula);
+		System.out.println(elementsSP);
+		System.out.println(elementsPG);
+		for (int n = 0; n < elementsSP.size(); n++) {
+			matcher = patternE.matcher(elementsSP.get(n));
+			matcher.find();
+			String eSP = matcher.group();
+			Integer nSP;
+			try {
+				matcher = patternN.matcher(elementsSP.get(n));
+				matcher.find();
+				nSP = Integer.parseInt(matcher.group());
+			} catch (IllegalStateException ex) {// If the element doesn't have a number with it, it's assumed to be 1.
+				nSP = 1;
 			}
-			if (result[n].chars().allMatch(Character::isDigit)) {
 
-				mapformula.put(Element.valueOf(result[n - 1]), Integer.parseInt(result[n]));
+			add(Element.valueOf(eSP), nSP);
+			System.out.println("Metemos elemento " + eSP + " con " + nSP);
 
+		} // finished adding non-parentheses elements.
+		for (int n = 0; n < elementsPG.size(); n++) {
+			ArrayList<String> eInsideP = new ArrayList<String>();
+
+			int multiplier = 0;
+			matcher = patternInsideP.matcher(elementsPG.get(n));
+			while (matcher.find()) {
+				eInsideP.add(matcher.group());
 			}
 
+			char lastC = elementsPG.get(n).charAt(elementsPG.get(n).length() - 1);
+			if (Character.isDigit(lastC)) {
+				multiplier = Character.getNumericValue(lastC);// we get the last character of
+				// the groups, that would be a number.
+			} else {
+				multiplier = 1;
+			}
+
+			for (int i = 0; i < eInsideP.size(); i++) {
+				matcher = patternE.matcher(eInsideP.get(i));// TODO do a method, used twice.
+				matcher.find();
+				String eSP = matcher.group();
+				Integer nSP;
+				try {
+					matcher = patternN.matcher(eInsideP.get(i));
+					matcher.find();
+					nSP = Integer.parseInt(matcher.group());
+				} catch (IllegalStateException ex) {// If the element doesn't have a number with it, it's assumed to be
+													// 1.
+					nSP = 1;
+				}
+
+				add(Element.valueOf(eSP), nSP * multiplier);
+				System.out.println("Metemos elemento " + eSP + " con " + nSP * multiplier);
+
+			}
 		}
 
 	}
-
 }

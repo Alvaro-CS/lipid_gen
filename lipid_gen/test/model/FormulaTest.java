@@ -7,12 +7,11 @@ import org.junit.jupiter.api.Test;
 class FormulaTest {
 
 	@Test
-	void testFormulaConstructor() {
-		String regex = "Ca3LiN4(Mg2O10He)3H2(Cd4)2";
+	void testFormulaConstructor() throws Exception {
+		String string = "Ca3LiN4(Mg2O10F4He)4H2(Cd4)3";
 		Formula formula = new Formula("njnjk");
-		System.out.println(formula.isValidFormula(regex));
-		// System.out.println(formula.getFormulaSPData(regex));
-		// System.out.println(formula.getFormulaPGData(regex));
+		// System.out.println(formula.isValidFormula(string));
+		formula.createMapFormula(string);
 
 		assertTrue(Boolean.TRUE);
 

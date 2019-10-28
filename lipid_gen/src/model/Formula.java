@@ -51,7 +51,7 @@ public class Formula {
 
 	public static void add(Element e, int num) throws Exception {
 		if (num <= 0) {
-			throw new Exception();
+			throw new Exception("We can't add a negative amount of elements.");
 		}
 		if (mapformula.containsKey(e)) {
 			mapformula.put(e, num + mapformula.get(e));
@@ -60,11 +60,19 @@ public class Formula {
 		}
 	}
 
-	public void remove(Element e, int num) {
-		// Comprobar si elemento en MAPFORMULA
-		// Comprobar si suficientes elementos para eliminar
-		// Si elemento finalmente queda a 0, eliminar la clave del mapa.
-		// TODO Implementar este método
+	public void remove(Element e, int num) throws Exception {
+		if (mapformula.containsKey(e)) {
+			if (mapformula.get(e) > num) {
+				mapformula.remove(e, num);
+			} else if (mapformula.get(e) == num) {
+				mapformula.remove(e);
+			} else if (mapformula.get(e) < num) {
+				throw new Exception("There's not enough elements in the formula for the deletion.");
+			}
+		} else {
+			throw new Exception("The formula doesn't have this element, so we can't delete it.");
+		}
+
 	}
 
 	public Set<Element> getElements() {

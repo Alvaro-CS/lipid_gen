@@ -21,9 +21,18 @@ public class Formula {
 	private static final Pattern patternN = Pattern.compile(formulaNumber);
 	private static final Pattern patternInsideP = Pattern.compile(formulaInsideP);
 
-	private static final Map<Element, Integer> mapformula = new HashMap<Element, Integer>(); // TODO is it okay this
-																								// static so .add
-																								// static?
+	private final Map<Element, Integer> mapFormula;
+
+	/**
+	 * <strong>Constructor for FA</strong> Creates the formula of a Fatty Acid
+	 *
+	 * @param Carbon_atoms
+	 * @param Double_bonds
+	 * @throws Exception
+	 */
+	public Formula(Map<Element, Integer> mapFormula) throws Exception {
+		this.mapFormula = mapFormula;
+	}
 
 	// TODO String name convertion
 	/**
@@ -33,14 +42,16 @@ public class Formula {
 	 * @param Double_bonds
 	 * @throws Exception
 	 */
-	public Formula(int C, int double_bonds) throws Exception {// TODO needed?
-		add(Element.C, C);
-		add(Element.H, 2 * C - (double_bonds * 2));
-		add(Element.O, 2);
+	public Formula(int C, int double_bonds) throws Exception {
+		this.mapFormula = new HashMap<Element, Integer>();
+		addElementToFormula(Element.C, C);
+		addElementToFormula(Element.H, 2 * C - (double_bonds * 2));
+		addElementToFormula(Element.O, 2);
 	}
 
 	public Formula(String formula) throws Exception {
 		if (isValidFormula(formula)) {
+			this.mapFormula = new HashMap<Element, Integer>();
 			createMapFormula(formula);
 		} else {
 			throw new Exception("The formula doesn't have a correct format or there are non-existing elements.");
@@ -50,29 +61,29 @@ public class Formula {
 	}
 
 	public Formula(Formula f1) throws Exception {
+		this.mapFormula = new HashMap<Element, Integer>();
 		for (Element e : f1.getElements()) {
-			add(e, f1.getElementQuantity(e));
+			addElementToFormula(e, f1.getElementQuantity(e));
 		}
 	}
 
-	public static void add(Element e, int num) throws Exception {
+	public void addElementToFormula(Element e, int num) throws Exception {
 		if (num <= 0) {
 			throw new Exception("We can't add a negative amount of elements.");
-		}
-		if (mapformula.containsKey(e)) {
-			mapformula.put(e, num + mapformula.get(e));
+		} else if (this.mapFormula.containsKey(e)) {
+			this.mapFormula.put(e, num + this.mapFormula.get(e));
 		} else {
-			mapformula.put(e, num);
+			this.mapFormula.put(e, num);
 		}
 	}
 
 	public void remove(Element e, int num) throws Exception {
-		if (mapformula.containsKey(e)) {
-			if (mapformula.get(e) > num) {
-				mapformula.remove(e, num);
-			} else if (mapformula.get(e) == num) {
-				mapformula.remove(e);
-			} else if (mapformula.get(e) < num) {
+		if (this.mapFormula.containsKey(e)) {
+			if (this.mapFormula.get(e) > num) {
+				this.mapFormula.remove(e, num);
+			} else if (this.mapFormula.get(e) == num) {
+				this.mapFormula.remove(e);
+			} else if (this.mapFormula.get(e) < num) {
 				throw new Exception("There's not enough elements in the formula for the deletion.");
 			}
 		} else {
@@ -82,11 +93,11 @@ public class Formula {
 	}
 
 	public Set<Element> getElements() {
-		return mapformula.keySet();
+		return mapFormula.keySet();
 	}
 
 	public int getElementQuantity(Element c) {
-		return mapformula.get(c);
+		return mapFormula.get(c);
 	}
 
 	/**
@@ -246,7 +257,7 @@ public class Formula {
 				nSP = 1;
 			}
 
-			add(Element.valueOf(eSP), nSP);
+			addElementToFormula(Element.valueOf(eSP), nSP);
 			System.out.println("Metemos elemento " + eSP + " con " + nSP);
 
 		} // finished adding non-parentheses elements.
@@ -281,7 +292,7 @@ public class Formula {
 					nSP = 1;
 				}
 
-				add(Element.valueOf(eSP), nSP * multiplier);
+				addElementToFormula(Element.valueOf(eSP), nSP * multiplier);
 				System.out.println("Metemos elemento " + eSP + " con " + nSP * multiplier);
 
 			}

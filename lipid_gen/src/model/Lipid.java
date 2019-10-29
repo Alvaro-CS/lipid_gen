@@ -95,7 +95,7 @@ public class Lipid {
 			Formula FA_formula = fa.getFormula();
 
 			for (Element e : FA_formula.getElements()) {
-				lipid_formula.add(e, FA_formula.getElementQuantity(e));
+				lipid_formula.addElementToFormula(e, FA_formula.getElementQuantity(e));
 			}
 			lipid_formula.remove(Element.H, 2);
 			/*

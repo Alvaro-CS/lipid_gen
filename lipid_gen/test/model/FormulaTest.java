@@ -49,6 +49,7 @@ class FormulaTest {
 
 			Formula formulaExpected = new Formula(elements);
 			Formula formula = new Formula(string);
+			System.out.println("TOSTRING:" + formula);
 			// assertEquals(formulaExpected, formula);TODO equals in every class
 			if (formulaExpected == formula) {
 				assertTrue(Boolean.TRUE);

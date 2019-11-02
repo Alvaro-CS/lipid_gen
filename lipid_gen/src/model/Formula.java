@@ -34,7 +34,6 @@ public class Formula {
 		this.mapFormula = mapFormula;
 	}
 
-	// TODO String name convertion
 	/**
 	 * <strong>Constructor for FA</strong> Creates the formula of a Fatty Acid
 	 *
@@ -299,4 +298,15 @@ public class Formula {
 		}
 
 	}
+
+	@Override
+	public String toString() {
+		String formula = "";
+		for (Element e : getElements()) {
+			formula += e.toString() + getElementQuantity(e);
+
+		}
+		return formula;
+	}
+
 }

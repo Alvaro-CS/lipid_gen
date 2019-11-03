@@ -1,48 +1,66 @@
 package model;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import org.junit.jupiter.api.Test;
-
-import Exceptions.Fatty_acidCreationException;
 
 class LipidTest {
 
 	@Test
-	void testLipid() {
-		//fail("Not yet implemented");
-		
+	void testLipid() throws Exception {
+		List<Fatty_acid> FAs = new ArrayList<Fatty_acid>();
+		FAs.add(new Fatty_acid(20, 2));
+		FAs.add(new Fatty_acid(30, 5));
+		FAs.add(new Fatty_acid(36, 6));
+
+		Skeleton skeleton = new Skeleton(Ske_type.TG);
+		Lipid lipid = new Lipid(skeleton, FAs);
+//TODO how to check the lipid? also appropiate FAs for Ske
+		System.out.println(lipid.getAbbvName());
+		System.out.println(lipid.getDoubleBonds());
+		System.out.println(lipid.getLength());
+		System.out.println(lipid.getName());
+		System.out.println(lipid.getMass());
+		System.out.println(lipid.getFormula());
+		assertTrue(true);
 	}
-	
+
 	@Test
 	void testLipidConstructorNull() throws Exception {
-		Lipid expectedResult = null;
 		try {
-			Lipid result = new Lipid(null,null);
+			Lipid result = new Lipid(null, null);
 			fail("A new Lipid with null values does not return a NullPointerException");
-		}
-		catch (NullPointerException npe){
+		} catch (NullPointerException npe) {
 			assertTrue(Boolean.TRUE);
-		}	
+		}
 	}
+
 	@Test
-	void testLipid8Mass() throws Exception {
-		
-		Fatty_acid fa=new Fatty_acid(8, 0);
-		Lipid li=new Lipid(fa);
-		Double mass=li.getMass();
-		if(mass==144.11503d)assertTrue(Boolean.TRUE); else fail("Mass doesn't match");
+	void testLipidFA8Mass() throws Exception {
+
+		Fatty_acid fa = new Fatty_acid(8, 0);
+		Lipid li = new Lipid(fa);
+		Double mass = li.getMass();
+		if (mass == 144.11503d)
+			assertTrue(Boolean.TRUE);
+		else
+			fail("Mass doesn't match");
 	}
-	
+
 	@Test
-	void testLipidDBMass() throws Exception {
-		
-		Fatty_acid fa=new Fatty_acid(15, 4);
-		Lipid li=new Lipid(fa);
-		Double mass=li.getMass();
-		if(mass==234.16198d)assertTrue(Boolean.TRUE); else fail("Mass doesn't match");
+	void testLipidFADBMass() throws Exception {
+
+		Fatty_acid fa = new Fatty_acid(15, 4);
+		Lipid li = new Lipid(fa);
+		Double mass = li.getMass();
+		if (mass == 234.16198d)
+			assertTrue(Boolean.TRUE);
+		else
+			fail("Mass doesn't match");
 	}
-	
-	
 
 }

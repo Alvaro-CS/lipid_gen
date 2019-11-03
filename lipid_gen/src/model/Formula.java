@@ -24,10 +24,10 @@ public class Formula {
 	private final Map<Element, Integer> mapFormula;
 
 	/**
-	 * <strong>Constructor for FA</strong> Creates the formula of a Fatty Acid
+	 * <strong>Constructor for formula from the map</strong> Creates the formula
+	 * from a HashMap of elements
 	 *
-	 * @param Carbon_atoms
-	 * @param Double_bonds
+	 * @param mapformula the HashMap
 	 * @throws Exception
 	 */
 	public Formula(Map<Element, Integer> mapFormula) throws Exception {
@@ -238,11 +238,11 @@ public class Formula {
 	 */
 	public void createMapFormula(String formula) throws Exception {
 		Matcher matcher;
-		System.out.println(formula);
+		// System.out.println(formula);
 		ArrayList<String> elementsSP = getFormulaSPData(formula);
 		ArrayList<String> elementsPG = getFormulaPGData(formula);
-		System.out.println(elementsSP);
-		System.out.println(elementsPG);
+		// System.out.println(elementsSP);
+		// System.out.println(elementsPG);
 		for (int n = 0; n < elementsSP.size(); n++) {
 			matcher = patternE.matcher(elementsSP.get(n));
 			matcher.find();
@@ -257,7 +257,7 @@ public class Formula {
 			}
 
 			addElementToFormula(Element.valueOf(eSP), nSP);
-			System.out.println("Metemos elemento " + eSP + " con " + nSP);
+			// System.out.println("Metemos elemento " + eSP + " con " + nSP);
 
 		} // finished adding non-parentheses elements.
 		for (int n = 0; n < elementsPG.size(); n++) {

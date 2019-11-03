@@ -11,14 +11,18 @@ public class Fatty_acid {
 		if (double_bonds > C - 1)
 			throw new Fatty_acidCreationException(
 					"Double bonds of the molecule must be at least lower than the number of Carbon atoms-1.");
-		if (double_bonds < 0 || C < 0)
+		if (double_bonds < 0 || C < 3)
 			throw new Fatty_acidCreationException(
-					"The fatty acid can't have a negative number of double bonds or carbon atoms.");
+					"The fatty acid can't have a negative number of double bonds or less than 3 carbon atoms.");
 		if (C > 36)
 			throw new Fatty_acidCreationException("The fatty acid can't have more than 36 carbon atoms.");
+		if (double_bonds > 6)
+			throw new Fatty_acidCreationException("The fatty acid can't have more than 6 double bonds.");
 		if (C == null || double_bonds == null) {
 			throw new NullPointerException();
 		}
+		this.C = C;
+		this.double_bonds = double_bonds;
 		this.formula = new Formula(C, double_bonds);
 	}
 
@@ -53,6 +57,11 @@ public class Fatty_acid {
 		} else if (!formula.equals(other.formula))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Fatty_acid [formula=" + formula + ", C=" + C + ", double_bonds=" + double_bonds + "]";
 	}
 
 }

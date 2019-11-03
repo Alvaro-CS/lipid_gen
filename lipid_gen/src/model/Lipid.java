@@ -4,6 +4,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import utilities.Periodic_table;
+import utilities.Ske_type_FAs;
 
 public class Lipid {
 	private final Double mass;
@@ -21,12 +22,14 @@ public class Lipid {
 		}
 
 		formula = calculateLipidFormula(skeleton, FAs);
+		doubleBonds = calculateDoubleBonds(FAs);
+		length = calculateLength(FAs);
 		abbvName = calculateAbbvName(skeleton, FAs);
 		mass = calculateMass(formula);
 		name = calculateName(skeleton, FAs);
-		length = calculateLength(FAs);
-		doubleBonds = calculateDoubleBonds(FAs);
 		this.skeleton = skeleton;
+		if (FAs.size() != Ske_type_FAs.MAPFAS.get(skeleton.getSke_type()))
+			throw new Exception("The number of Fatty Acids is not the appropiate for this skeleton.");
 		this.FAs = FAs;
 
 	}
@@ -104,20 +107,6 @@ public class Lipid {
 			 * 
 			 */
 
-			/*
-			 * for (Map.Entry<Element, Integer> entry_ske :
-			 * lipid_formula.getMAPFORMULA().entrySet()) { for (Map.Entry<Element, Integer>
-			 * entry_FA : FA_formula.getMAPFORMULA().entrySet()) { if
-			 * (entry_ske.getKey().equals(Element.H)) {
-			 * entry_ske.setValue(entry_ske.getValue() - 2); } if (entry_ske.getKey() ==
-			 * entry_FA.getKey()) { entry_ske.setValue(entry_ske.getValue() +
-			 * entry_FA.getValue()); }
-			 * 
-			 * }
-			 * 
-			 * }
-			 */
-
 		}
 		return lipid_formula;
 
@@ -182,7 +171,7 @@ public class Lipid {
 			int length, d_bonds;
 			for (int n = 0; n < FAs.size(); n++) {
 				length = FAs.get(n).getC();
-				d_bonds = FAs.get(n).getC();
+				d_bonds = FAs.get(n).getDouble_bonds();
 				lipid_name += length + ":" + d_bonds;
 				if (n < FAs.size() - 1)
 					lipid_name += "/";

@@ -240,4 +240,51 @@ public class Lipid {
 		}
 		return d_bonds;
 	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Lipid other = (Lipid) obj;
+		if (FAs == null) {
+			if (other.FAs != null)
+				return false;
+		} else if (!FAs.equals(other.FAs))
+			return false;
+		if (abbvName == null) {
+			if (other.abbvName != null)
+				return false;
+		} else if (!abbvName.equals(other.abbvName))
+			return false;
+		if (doubleBonds != other.doubleBonds)
+			return false;
+		if (formula == null) {
+			if (other.formula != null)
+				return false;
+		} else if (!formula.equals(other.formula))
+			return false;
+		if (length != other.length)
+			return false;
+		if (mass == null) {
+			if (other.mass != null)
+				return false;
+		} else if (!mass.equals(other.mass))
+			return false;
+		if (name == null) {
+			if (other.name != null)
+				return false;
+		} else if (!name.equals(other.name))
+			return false;
+		if (skeleton == null) {
+			if (other.skeleton != null)
+				return false;
+		} else if (!skeleton.equals(other.skeleton))
+			return false;
+		return true;
+	}
+
 }

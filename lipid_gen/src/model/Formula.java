@@ -309,4 +309,21 @@ public class Formula {
 		return formula;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Formula other = (Formula) obj;
+		if (mapFormula == null) {
+			if (other.mapFormula != null)
+				return false;
+		} else if (!mapFormula.equals(other.mapFormula))
+			return false;
+		return true;
+	}
+
 }

@@ -34,4 +34,25 @@ public class Fatty_acid {
 		return double_bonds;
 	}
 
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Fatty_acid other = (Fatty_acid) obj;
+		if (C != other.C)
+			return false;
+		if (double_bonds != other.double_bonds)
+			return false;
+		if (formula == null) {
+			if (other.formula != null)
+				return false;
+		} else if (!formula.equals(other.formula))
+			return false;
+		return true;
+	}
+
 }

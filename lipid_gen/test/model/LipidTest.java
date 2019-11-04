@@ -8,6 +8,8 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import utilities.Periodic_table;
+
 class LipidTest {
 
 	@Test
@@ -19,14 +21,35 @@ class LipidTest {
 
 		Skeleton skeleton = new Skeleton(Ske_type.TG);
 		Lipid lipid = new Lipid(skeleton, FAs);
-//TODO how to check the lipid? also appropiate FAs for Ske
+//TODO check this
 		System.out.println(lipid.getAbbvName());
 		System.out.println(lipid.getDoubleBonds());
 		System.out.println(lipid.getLength());
 		System.out.println(lipid.getName());
+		double FAs_mass = lipid.calculateMass(FAs.get(0).getFormula()) + lipid.calculateMass(FAs.get(1).getFormula())
+				+ lipid.calculateMass(FAs.get(2).getFormula());
+		double ske_mass = lipid.calculateMass(skeleton.getFormula());
+		double mass = FAs_mass + ske_mass;
+		System.out.println(mass - Periodic_table.MAPELEMENTS.get(Element.H) * 6);
 		System.out.println(lipid.getMass());
 		System.out.println(lipid.getFormula());
 		assertTrue(true);
+	}
+
+	@Test
+	void testLipidFalseSke() throws Exception {
+		List<Fatty_acid> FAs = new ArrayList<Fatty_acid>();
+		FAs.add(new Fatty_acid(20, 2));
+		FAs.add(new Fatty_acid(30, 5));
+		FAs.add(new Fatty_acid(36, 6));
+
+		Skeleton skeleton = new Skeleton(Ske_type.MG);
+		try {
+			Lipid lipid = new Lipid(skeleton, FAs);
+			fail("DG need 2 FAs, not 3.");
+		} catch (Exception e) {
+			assertTrue(true);
+		}
 	}
 
 	@Test

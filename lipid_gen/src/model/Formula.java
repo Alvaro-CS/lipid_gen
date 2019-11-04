@@ -79,7 +79,7 @@ public class Formula {
 	public void remove(Element e, int num) throws Exception {
 		if (this.mapFormula.containsKey(e)) {
 			if (this.mapFormula.get(e) > num) {
-				this.mapFormula.remove(e, num);
+				this.mapFormula.put(e, this.mapFormula.get(e) - num);
 			} else if (this.mapFormula.get(e) == num) {
 				this.mapFormula.remove(e);
 			} else if (this.mapFormula.get(e) < num) {

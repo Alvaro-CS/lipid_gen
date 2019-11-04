@@ -93,7 +93,6 @@ public class Lipid {
 	 */
 	public static Formula calculateLipidFormula(Skeleton ske, List<Fatty_acid> FAs) throws Exception {
 		Formula lipid_formula = new Formula(ske.getFormula());
-
 		for (Fatty_acid fa : FAs) {
 			Formula FA_formula = fa.getFormula();
 
@@ -106,7 +105,6 @@ public class Lipid {
 			 * fa.getFormula().remove(Element.H, 1);
 			 * 
 			 */
-
 		}
 		return lipid_formula;
 

@@ -50,4 +50,9 @@ public class Skeleton {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Skeleton [ske_type=" + ske_type + ", formula=" + formula + "]";
+	}
+
 }

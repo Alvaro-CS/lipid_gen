@@ -16,6 +16,14 @@ public class Lipid {
 	private final int length;
 	private final int doubleBonds;
 
+	/**
+	 * Lipid constructor from a skeleton and a list of Fatty Acids that match with
+	 * the skeleton type.
+	 * 
+	 * @param skeleton
+	 * @param FAs      the list of Fatty Acids
+	 * @throws Exception
+	 */
 	public Lipid(Skeleton skeleton, List<Fatty_acid> FAs) throws Exception {
 		if (skeleton == null || FAs == null) {
 			throw new NullPointerException();
@@ -34,6 +42,12 @@ public class Lipid {
 
 	}
 
+	/**
+	 * Lipid constructor a single Fatty Acid
+	 * 
+	 * @param fa the Fatty Acid
+	 * @throws Exception
+	 */
 	public Lipid(Fatty_acid fa) throws NullPointerException {
 		if (fa == null) {
 			throw new NullPointerException();

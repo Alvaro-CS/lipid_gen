@@ -48,6 +48,14 @@ public class Formula {
 		addElementToFormula(Element.O, 2);
 	}
 
+	/**
+	 * <strong>Constructor for Formula</strong> Creates the formula from a String.
+	 * It checks that the formula exists and it parses all the elements from the
+	 * String and sets them inside the Hashmap.
+	 * 
+	 * @param formula (string)
+	 * @throws Exception
+	 */
 	public Formula(String formula) throws Exception {
 		if (isValidFormula(formula)) {
 			this.mapFormula = new HashMap<Element, Integer>();
@@ -59,6 +67,12 @@ public class Formula {
 
 	}
 
+	/**
+	 * <strong>Constructor for Formula</strong> Creates a copy of an object formula.
+	 *
+	 * @param f1 The object formula we want to make a copy of.
+	 * @throws Exception
+	 */
 	public Formula(Formula f1) throws Exception {
 		this.mapFormula = new HashMap<Element, Integer>();
 		for (Element e : f1.getElements()) {
@@ -66,6 +80,15 @@ public class Formula {
 		}
 	}
 
+	/**
+	 * Adds a certain element to the formula map. If the element doesn't exist, it's
+	 * created and if it already exists, the amount of new element is added to the
+	 * existing one.
+	 *
+	 * @param e   element
+	 * @param num amount of elements
+	 * @throws Exception
+	 */
 	public void addElementToFormula(Element e, int num) throws Exception {
 		if (num <= 0) {
 			throw new Exception("We can't add a negative amount of elements.");
@@ -76,6 +99,14 @@ public class Formula {
 		}
 	}
 
+	/**
+	 * Deletes a certain amount of elements from the formula map. If there are no
+	 * more elements, the mapping for the element is removed.
+	 *
+	 * @param e   element
+	 * @param num amount of elements
+	 * @throws Exception
+	 */
 	public void remove(Element e, int num) throws Exception {
 		if (this.mapFormula.containsKey(e)) {
 			if (this.mapFormula.get(e) > num) {

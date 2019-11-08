@@ -4,7 +4,14 @@ import Exceptions.Fatty_acidCreationException;
 
 public class Fatty_acid {
 	private final Formula formula;
-	private int C, double_bonds;// TODO final?
+	private int C, double_bonds;
+
+	/**
+	 * Constructor of a Fatty Acid from the number of double bonds and carbon atoms.
+	 *
+	 * @param C            the number of carbon atoms
+	 * @param double_bonds
+	 */
 
 	public Fatty_acid(Integer C, Integer double_bonds) throws Exception {
 

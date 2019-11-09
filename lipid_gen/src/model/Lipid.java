@@ -4,11 +4,9 @@ import java.util.LinkedList;
 import java.util.List;
 
 import utilities.Periodic_table;
-import utilities.Ske_type_FAs;
+import utilities.Ske_type_prop;
 
-public class Lipid {
-	private final Double mass;
-	private final Formula formula;
+public class Lipid extends Chemical_element {
 	private final Skeleton skeleton;
 	private final List<Fatty_acid> FAs;
 	private final String name;
@@ -33,11 +31,14 @@ public class Lipid {
 		doubleBonds = calculateDoubleBonds(FAs);
 		length = calculateLength(FAs);
 		abbvName = calculateAbbvName(skeleton, FAs);
-		mass = calculateMass(formula);
+		mass = getMass();
 		name = calculateName(skeleton, FAs);
 		this.skeleton = skeleton;
-		if (FAs.size() != Ske_type_FAs.MAPFAS.get(skeleton.getSke_type()))
+		if (FAs.size() > Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).maxFAs
+				|| FAs.size() < Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).minFAs) {
+
 			throw new Exception("The number of Fatty Acids is not the appropiate for this skeleton.");
+		}
 		this.FAs = FAs;
 
 	}
@@ -67,10 +68,6 @@ public class Lipid {
 
 	public Formula getFormula() {
 		return formula;
-	}
-
-	public Double getMass() {
-		return mass;
 	}
 
 	public String getName() {

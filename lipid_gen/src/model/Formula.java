@@ -1,12 +1,13 @@
 package model;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import utilities.ElementsComparator;
 import utilities.Periodic_table;
 
 public class Formula {
@@ -21,31 +22,18 @@ public class Formula {
 	private static final Pattern patternN = Pattern.compile(formulaNumber);
 	private static final Pattern patternInsideP = Pattern.compile(formulaInsideP);
 
-	private final Map<Element, Integer> mapFormula;
+	// TODO CHANGE TO THE PLACES TO INVOKE THE FORMULA
+	private final TreeMap<Element, Integer> mapFormula = new TreeMap<Element, Integer>(new ElementsComparator());
 
 	/**
 	 * <strong>Constructor for formula from the map</strong> Creates the formula
-	 * from a HashMap of elements
+	 * from a TreeMap of elements
 	 *
 	 * @param mapformula the HashMap
 	 * @throws Exception
 	 */
-	public Formula(Map<Element, Integer> mapFormula) throws Exception {
-		this.mapFormula = mapFormula;
-	}
-
-	/**
-	 * <strong>Constructor for FA</strong> Creates the formula of a Fatty Acid
-	 *
-	 * @param Carbon_atoms
-	 * @param Double_bonds
-	 * @throws Exception
-	 */
-	public Formula(int C, int double_bonds) throws Exception {
-		this.mapFormula = new HashMap<Element, Integer>();
-		addElementToFormula(Element.C, C);
-		addElementToFormula(Element.H, 2 * C - (double_bonds * 2));
-		addElementToFormula(Element.O, 2);
+	public Formula(Map<Element, Integer> formula) throws Exception {
+		this.mapFormula.putAll(formula);
 	}
 
 	/**
@@ -58,7 +46,6 @@ public class Formula {
 	 */
 	public Formula(String formula) throws Exception {
 		if (isValidFormula(formula)) {
-			this.mapFormula = new HashMap<Element, Integer>();
 			createMapFormula(formula);
 		} else {
 			throw new Exception("The formula doesn't have a correct format or there are non-existing elements.");
@@ -74,10 +61,7 @@ public class Formula {
 	 * @throws Exception
 	 */
 	public Formula(Formula f1) throws Exception {
-		this.mapFormula = new HashMap<Element, Integer>();
-		for (Element e : f1.getElements()) {
-			addElementToFormula(e, f1.getElementQuantity(e));
-		}
+		this(f1.mapFormula);
 	}
 
 	/**
@@ -323,7 +307,7 @@ public class Formula {
 				}
 
 				addElementToFormula(Element.valueOf(eSP), nSP * multiplier);
-				System.out.println("Metemos elemento " + eSP + " con " + nSP * multiplier);
+				// System.out.println("Metemos elemento " + eSP + " con " + nSP * multiplier);
 
 			}
 		}
@@ -335,7 +319,6 @@ public class Formula {
 		String formula = "";
 		for (Element e : getElements()) {
 			formula += e.toString() + getElementQuantity(e);
-
 		}
 		return formula;
 	}
@@ -352,8 +335,9 @@ public class Formula {
 		if (mapFormula == null) {
 			if (other.mapFormula != null)
 				return false;
-		} else if (!mapFormula.equals(other.mapFormula))
+		} else if (!obj.toString().equals(other.toString())) {
 			return false;
+		}
 		return true;
 	}
 

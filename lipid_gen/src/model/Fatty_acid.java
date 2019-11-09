@@ -1,10 +1,14 @@
 package model;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 import Exceptions.Fatty_acidCreationException;
 
-public class Fatty_acid {
-	private final Formula formula;
-	private int C, double_bonds;
+public class Fatty_acid extends Chemical_element {
+
+	private int C;
+	private int double_bonds;
 
 	/**
 	 * Constructor of a Fatty Acid from the number of double bonds and carbon atoms.
@@ -30,7 +34,15 @@ public class Fatty_acid {
 		}
 		this.C = C;
 		this.double_bonds = double_bonds;
-		this.formula = new Formula(C, double_bonds);
+
+		// CREATE A MAP WITH THE NUMBER OF ELEMENTS LIKE HERE
+		Map<Element, Integer> elementsFA = new TreeMap<Element, Integer>();
+		elementsFA.put(Element.C, C);
+		elementsFA.put(Element.H, 2 * C - (double_bonds * 2));
+		elementsFA.put(Element.O, 2);
+
+		this.formula = new Formula(elementsFA);
+		this.mass = getMass();
 	}
 
 	public Formula getFormula() {

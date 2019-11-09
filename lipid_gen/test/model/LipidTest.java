@@ -21,7 +21,7 @@ class LipidTest {
 
 		Skeleton skeleton = new Skeleton(Ske_type.TG);
 		Lipid lipid = new Lipid(skeleton, FAs);
-//TODO check this
+//TODO check this how
 		System.out.println(lipid.getAbbvName());
 		System.out.println(lipid.getDoubleBonds());
 		System.out.println(lipid.getLength());
@@ -43,12 +43,28 @@ class LipidTest {
 		FAs.add(new Fatty_acid(30, 5));
 		FAs.add(new Fatty_acid(36, 6));
 
-		Skeleton skeleton = new Skeleton(Ske_type.MG);
+		Skeleton skeleton = new Skeleton(Ske_type.DG);
 		try {
 			Lipid lipid = new Lipid(skeleton, FAs);
 			fail("DG need 2 FAs, not 3.");
 		} catch (Exception e) {
 			assertTrue(true);
+		}
+	}
+
+	@Test
+	void testFalseSke2() throws Exception {
+		List<Fatty_acid> FAs = new ArrayList<Fatty_acid>();
+		FAs.add(new Fatty_acid(20, 2));
+
+		Skeleton skeleton = new Skeleton(Ske_type.PA);
+		try {
+			Lipid lipid = new Lipid(skeleton, FAs);
+			assertTrue(true);
+
+		} catch (Exception e) {
+			fail("PA can have 1 or 2 FAs");
+
 		}
 	}
 
@@ -65,10 +81,11 @@ class LipidTest {
 	@Test
 	void testLipidFA8Mass() throws Exception {
 
-		Fatty_acid fa = new Fatty_acid(8, 0);
+		Fatty_acid fa = new Fatty_acid(9, 0);
 		Lipid li = new Lipid(fa);
 		Double mass = li.getMass();
-		if (mass == 144.11503d)
+		System.out.println(mass);
+		if (mass == 158.13068d)
 			assertTrue(Boolean.TRUE);
 		else
 			fail("Mass doesn't match");

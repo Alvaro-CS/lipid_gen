@@ -15,9 +15,12 @@ public class Simulation {
 		ArrayList<Lipid> LIPIDs = new ArrayList<Lipid>();
 		ArrayList<Fatty_acid> FAs = FAcreator();
 		ArrayList<Skeleton> SKEs = SKEcreator();
+		for (Fatty_acid fa : FAs) {// It adds to the list all lipids that consist on a single Fatty Acid
+			Lipid lipid = new Lipid(fa);
+		}
 		for (Skeleton ske : SKEs) {
 			for (Fatty_acid fa : FAs) {
-
+//TODO ir extrayendo Lipid lipid= new Lipid(ske, FAs)
 			}
 		}
 

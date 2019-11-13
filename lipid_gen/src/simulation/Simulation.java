@@ -31,14 +31,33 @@ public class Simulation {
 				}
 			}
 			if (Ske_type_prop.MAPSKE.get(Ske_type.valueOf(ske.getSke_type().toString())).getMaxFAs() == 2) {
-				// cabeza con 2
+				for (int i = 0; i < FAs.size(); i++) {
+					for (int j = i; j < FAs.size(); j++) {
+						ArrayList<Fatty_acid> fas = new ArrayList<Fatty_acid>();
+						fas.add(FAs.get(i));
+						fas.add(FAs.get(j));
+						Lipid lipid = new Lipid(ske, fas);
+						LIPIDs.add(lipid);
+					}
+				}
 			}
 			if (Ske_type_prop.MAPSKE.get(Ske_type.valueOf(ske.getSke_type().toString())).getMaxFAs() == 3) {
-				// cabeza con 3
+				for (int i = 0; i < FAs.size(); i++) {
+					for (int j = i; j < FAs.size(); j++) {
+						for (int k = j; k < FAs.size(); k++) {
+
+							ArrayList<Fatty_acid> fas = new ArrayList<Fatty_acid>();
+							fas.add(FAs.get(i));
+							fas.add(FAs.get(j));
+							fas.add(FAs.get(k));
+							Lipid lipid = new Lipid(ske, fas);
+							LIPIDs.add(lipid);
+						}
+
+					}
+				}
 			}
-
 		}
-
 		return LIPIDs;
 
 	}

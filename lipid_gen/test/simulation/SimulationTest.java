@@ -36,6 +36,9 @@ class SimulationTest {
 		}
 		System.out.println(LIPIDs.size());
 		// Lipids with 1= 10*228+228=2508.
+		// Lipids with 2=8 Combination without repetition 25878*8=207024
+		// Lipids with 3=1 Combination without repetition 1949476
+		// More Lipids are generated than theorized???
 	}
 
 }

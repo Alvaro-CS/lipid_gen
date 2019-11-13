@@ -7,7 +7,7 @@ public class Skeleton extends Chemical_element {
 	private final Ske_type ske_type;
 
 	public Skeleton(Ske_type ske_type) {
-		this.formula = Ske_type_prop.MAPSKE.get(ske_type).formula;
+		this.formula = Ske_type_prop.MAPSKE.get(ske_type).getFormula();
 		mass = getMass();
 		this.ske_type = ske_type;
 	}

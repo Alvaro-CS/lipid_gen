@@ -28,4 +28,5 @@ public class Ske_type_prop {
 			e.printStackTrace();
 		}
 	}
+
 }

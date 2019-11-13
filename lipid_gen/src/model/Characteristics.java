@@ -1,9 +1,9 @@
 package model;
 
 public class Characteristics {
-	Formula formula;
-	int minFAs;
-	int maxFAs;
+	private final Formula formula;
+	private final int minFAs;
+	private final int maxFAs;
 
 	/**
 	 * Constructor of Characteristics for a Ske_type that has a minimum and maximum
@@ -32,6 +32,18 @@ public class Characteristics {
 		this.minFAs = n;
 		this.maxFAs = n;
 
+	}
+
+	public Formula getFormula() {
+		return formula;
+	}
+
+	public int getMinFAs() {
+		return minFAs;
+	}
+
+	public int getMaxFAs() {
+		return maxFAs;
 	}
 
 }

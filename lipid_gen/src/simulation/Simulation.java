@@ -6,25 +6,41 @@ import model.Fatty_acid;
 import model.Lipid;
 import model.Ske_type;
 import model.Skeleton;
+import utilities.Ske_type_prop;
 
 public class Simulation {
 	public Simulation() {
 	}
 
-	public ArrayList<Lipid> LIPIDcreator() {
+	public ArrayList<Lipid> LIPIDcreator() throws Exception {// TODO HASHSET? Exception
 		ArrayList<Lipid> LIPIDs = new ArrayList<Lipid>();
 		ArrayList<Fatty_acid> FAs = FAcreator();
 		ArrayList<Skeleton> SKEs = SKEcreator();
 		for (Fatty_acid fa : FAs) {// It adds to the list all lipids that consist on a single Fatty Acid
 			Lipid lipid = new Lipid(fa);
+			LIPIDs.add(lipid);
 		}
 		for (Skeleton ske : SKEs) {
-			for (Fatty_acid fa : FAs) {
-//TODO ir extrayendo Lipid lipid= new Lipid(ske, FAs)
+			if (Ske_type_prop.MAPSKE.get(Ske_type.valueOf(ske.getSke_type().toString())).getMinFAs() == 1) {
+				for (int i = 0; i < FAs.size(); i++) {
+					ArrayList<Fatty_acid> fas = new ArrayList<Fatty_acid>();
+					System.out.println(FAs.get(i));
+					fas.add(FAs.get(i));
+					Lipid lipid = new Lipid(ske, fas);
+					LIPIDs.add(lipid);
+				}
 			}
+			if (Ske_type_prop.MAPSKE.get(Ske_type.valueOf(ske.getSke_type().toString())).getMaxFAs() == 2) {
+				// cabeza con 2
+			}
+			if (Ske_type_prop.MAPSKE.get(Ske_type.valueOf(ske.getSke_type().toString())).getMaxFAs() == 3) {
+				// cabeza con 3
+			}
+
 		}
 
 		return LIPIDs;
+
 	}
 
 	public ArrayList<Fatty_acid> FAcreator() {

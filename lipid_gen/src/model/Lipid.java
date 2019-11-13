@@ -34,8 +34,8 @@ public class Lipid extends Chemical_element {
 		mass = getMass();
 		name = calculateName(skeleton, FAs);
 		this.skeleton = skeleton;
-		if (FAs.size() > Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).maxFAs
-				|| FAs.size() < Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).minFAs) {
+		if (FAs.size() > Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).getMaxFAs()
+				|| FAs.size() < Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).getMinFAs()) {
 
 			throw new Exception("The number of Fatty Acids is not the appropiate for this skeleton.");
 		}
@@ -240,10 +240,23 @@ public class Lipid extends Chemical_element {
 	}
 
 	@Override
+	public int hashCode() {
+		final int prime = 31;
+		int result = super.hashCode();
+		result = prime * result + ((FAs == null) ? 0 : FAs.hashCode());
+		result = prime * result + ((abbvName == null) ? 0 : abbvName.hashCode());
+		result = prime * result + doubleBonds;
+		result = prime * result + length;
+		result = prime * result + ((name == null) ? 0 : name.hashCode());
+		result = prime * result + ((skeleton == null) ? 0 : skeleton.hashCode());
+		return result;
+	}
+
+	@Override
 	public boolean equals(Object obj) {
 		if (this == obj)
 			return true;
-		if (obj == null)
+		if (!super.equals(obj))
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
@@ -260,17 +273,7 @@ public class Lipid extends Chemical_element {
 			return false;
 		if (doubleBonds != other.doubleBonds)
 			return false;
-		if (formula == null) {
-			if (other.formula != null)
-				return false;
-		} else if (!formula.equals(other.formula))
-			return false;
 		if (length != other.length)
-			return false;
-		if (mass == null) {
-			if (other.mass != null)
-				return false;
-		} else if (!mass.equals(other.mass))
 			return false;
 		if (name == null) {
 			if (other.name != null)
@@ -283,6 +286,17 @@ public class Lipid extends Chemical_element {
 		} else if (!skeleton.equals(other.skeleton))
 			return false;
 		return true;
+	}
+
+	@Override
+	public String toString() {
+		return "Lipid [skeleton=" + skeleton + ", FAs=" + FAs + ", name=" + name + ", abbvName=" + abbvName
+				+ ", length=" + length + ", doubleBonds=" + doubleBonds + ", formula=" + formula + ", mass=" + mass
+				+ "]";
+	}
+
+	public String toStringName() {
+		return "Lipid [name=" + name + ", formula=" + formula + ", mass=" + mass + "]";
 	}
 
 }

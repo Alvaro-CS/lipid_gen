@@ -12,6 +12,7 @@ public class Simulation {
 	public Simulation() {
 	}
 
+//TODO calculate time in each for
 	public ArrayList<Lipid> LIPIDcreator() throws Exception {// TODO HASHSET? Exception
 		ArrayList<Lipid> LIPIDs = new ArrayList<Lipid>();
 		ArrayList<Fatty_acid> FAs = FAcreator();

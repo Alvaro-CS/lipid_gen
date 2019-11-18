@@ -22,7 +22,6 @@ public class Formula {
 	private static final Pattern patternN = Pattern.compile(formulaNumber);
 	private static final Pattern patternInsideP = Pattern.compile(formulaInsideP);
 
-	// TODO CHANGE TO THE PLACES TO INVOKE THE FORMULA
 	private final TreeMap<Element, Integer> mapFormula = new TreeMap<Element, Integer>(new ElementsComparator());
 
 	/**

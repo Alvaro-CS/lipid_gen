@@ -8,7 +8,7 @@ import java.sql.Statement;
 
 import model.Fatty_acid;
 import model.Lipid;
-import model.Skeleton;
+import model.Ske_type;
 
 public class SQLManager {
 
@@ -40,17 +40,11 @@ public class SQLManager {
 
 			Statement stmt1 = c.createStatement();
 			String sql1 = "CREATE TABLE compounds (" + "  compound_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-					+ "  cas_id varchar(100) UNIQUE DEFAULT NULL," + "  compound_name text not null,"//
-					+ "  formula varchar(100) DEFAULT '',"//
-					+ "  mass double DEFAULT 0,"//
-					+ "  charge_type int default 0, -- charge 0 for neutral, 1 for positive 2 for negative"
-					+ "  charge_number int default 0, -- number of charges (negative or positive)"
-					+ "  formula_type varchar(20) DEFAULT NULL, -- CHNOPS, CHNOPSD, CHNOPSCL, CHNOPSCLD, ALLD or ALL"
-					+ "  formula_type_int int, -- 0 CHNOPS, 1 CHNOPSD, 2 CHNOPSCL, 3 CHNOPSCLD, 4 ALL, 5 ALLD"
-					+ "  compound_type int default 0, -- type of compound: 0 for metabolite, 1 for lipids, 2 for peptide"
-					+ "  compound_status int default 0, -- status of compound: 0 expected, 1 detected, 2 quantified, 3 predicted (HMDB)"
-					+ "  logP double default null, -- LogP of the compound. By default 0"
-					+ "  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+					+ "  cas_id varchar(100) UNIQUE DEFAULT NULL," + "  compound_name text not null,"
+					+ "  formula varchar(100) DEFAULT ''," + "  mass double DEFAULT 0," + "  charge_type int default 0,"
+					+ "  charge_number int default 0," + "  formula_type varchar(20) DEFAULT NULL,"
+					+ "  formula_type_int int," + "  compound_type int default 0," + "  compound_status int default 0,"
+					+ "  logP double default null," + "  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
 					+ "  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 					+ "  INDEX compounds_cas_id_index (cas_id)," + "  INDEX compounds_formula_index (formula),"
 					+ "  INDEX compounds_mass_index (mass)," + "  INDEX compounds_charge_type_index (charge_type),"
@@ -95,15 +89,27 @@ public class SQLManager {
 		}
 	}
 
-	public void insertSkeleton(Skeleton s) {
+	public void insertLipid(Lipid l) {
 		try {
 
-			String sql = "INSERT INTO compounds (compound_name,formula,mass) " + "VALUES (?,?,?);";
+			String sql = "INSERT INTO compounds (compound_name,formula,mass,charge_type,charge_number,formula_type,formula_type_int,compound_type,compound_status) "
+					+ "VALUES (?,?,?,?,?,?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setString(1, s.getSke_type().toString());
-			prep.setString(2, s.getFormula().toString());
-			prep.setDouble(3, s.getMass());
-
+			prep.setString(1, l.getName());
+			prep.setString(2, l.getFormula().toString());
+			prep.setDouble(3, l.getMass());
+			if (l.getSkeleton().getSke_type().equals(Ske_type.PC)
+					|| l.getSkeleton().getSke_type().equals(Ske_type.SM)) {
+				prep.setInt(4, 1);
+				prep.setInt(5, 1);
+			} else {
+				prep.setInt(4, 0);
+				prep.setInt(5, 0);
+			}
+			prep.setString(6, "CHNOPS");
+			prep.setInt(7, 0);
+			prep.setInt(8, 1);
+			prep.setInt(9, 0);
 			prep.executeUpdate();
 			prep.close();
 		} catch (SQLException e) {
@@ -114,7 +120,7 @@ public class SQLManager {
 	public void insertFA(Fatty_acid fa) {
 		try {
 
-			String sql = "INSERT INTO chains (num_carbons,double_bonds,mass) " + "VALUES (?,?,?,?);";
+			String sql = "INSERT INTO chains (num_carbons,double_bonds,mass,formula) " + "VALUES (?,?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, fa.getC());
 			prep.setInt(2, fa.getDouble_bonds());
@@ -128,12 +134,12 @@ public class SQLManager {
 		}
 	}
 
-	public void insertLipid(Lipid l) {
+	public void connectChainsLipid(int number_chains, int compound_id, int chain_id) {
 		try {
 
-			String sql = "INSERT INTO compound_chain (number_chains) " + "VALUES (?);";
+			String sql = "INSERT INTO compound_chain (number_chains,compound_id,chain_id) " + "VALUES (?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
-			prep.setInt(1, l.getFAs().size());
+			prep.setInt(1, number_chains);
 //TODO unir tablas??
 			prep.executeUpdate();
 			prep.close();

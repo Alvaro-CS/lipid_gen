@@ -2,8 +2,13 @@ package persistence;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.SQLException;
 import java.sql.Statement;
+
+import model.Fatty_acid;
+import model.Lipid;
+import model.Skeleton;
 
 public class SQLManager {
 
@@ -35,8 +40,9 @@ public class SQLManager {
 
 			Statement stmt1 = c.createStatement();
 			String sql1 = "CREATE TABLE compounds (" + "  compound_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
-					+ "  cas_id varchar(100) UNIQUE DEFAULT NULL," + "  compound_name text not null,"
-					+ "  formula varchar(100) DEFAULT ''," + "  mass double DEFAULT 0,"
+					+ "  cas_id varchar(100) UNIQUE DEFAULT NULL," + "  compound_name text not null,"//
+					+ "  formula varchar(100) DEFAULT '',"//
+					+ "  mass double DEFAULT 0,"//
 					+ "  charge_type int default 0, -- charge 0 for neutral, 1 for positive 2 for negative"
 					+ "  charge_number int default 0, -- number of charges (negative or positive)"
 					+ "  formula_type varchar(20) DEFAULT NULL, -- CHNOPS, CHNOPSD, CHNOPSCL, CHNOPSCLD, ALLD or ALL"
@@ -86,6 +92,53 @@ public class SQLManager {
 			} else {
 				e.printStackTrace();
 			}
+		}
+	}
+
+	public void insertSkeleton(Skeleton s) {
+		try {
+
+			String sql = "INSERT INTO compounds (compound_name,formula,mass) " + "VALUES (?,?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1, s.getSke_type().toString());
+			prep.setString(2, s.getFormula().toString());
+			prep.setDouble(3, s.getMass());
+
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void insertFA(Fatty_acid fa) {
+		try {
+
+			String sql = "INSERT INTO chains (num_carbons,double_bonds,mass) " + "VALUES (?,?,?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, fa.getC());
+			prep.setInt(2, fa.getDouble_bonds());
+			prep.setDouble(3, fa.getMass());
+			prep.setString(4, fa.getFormula().toString());
+
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public void insertLipid(Lipid l) {
+		try {
+
+			String sql = "INSERT INTO compound_chain (number_chains) " + "VALUES (?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setInt(1, l.getFAs().size());
+//TODO unir tablas??
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 

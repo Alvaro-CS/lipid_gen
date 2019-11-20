@@ -17,7 +17,7 @@ public class Fatty_acid extends Chemical_element {
 	 * @param double_bonds
 	 */
 
-	public Fatty_acid(Integer C, Integer double_bonds) throws Exception {
+	public Fatty_acid(Integer C, Integer double_bonds) throws Fatty_acidCreationException {
 
 		if (double_bonds > C - 1)
 			throw new Fatty_acidCreationException(

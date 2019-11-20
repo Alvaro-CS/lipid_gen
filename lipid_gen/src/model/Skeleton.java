@@ -34,15 +34,10 @@ public class Skeleton extends Chemical_element {
 				return false;
 		} else if (!formula.equals(other.formula))
 			return false;
-		if (mass == null) {
-			if (other.mass != null)
-				return false;
-		} else if (!mass.equals(other.mass))
-			return false;
 		if (ske_type != other.ske_type)
 			return false;
 		return true;
-	}
+	}// TODO fix equals
 
 	@Override
 	public String toString() {

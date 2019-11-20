@@ -2,6 +2,7 @@ package simulation;
 
 import java.util.ArrayList;
 
+import Exceptions.InvalidFASizeException;
 import model.Fatty_acid;
 import model.Lipid;
 import model.Ske_type;
@@ -13,7 +14,7 @@ public class Simulation {
 	}
 
 //TODO calculate time in each for
-	public ArrayList<Lipid> LIPIDcreator() throws Exception {// TODO HASHSET? Exception
+	public ArrayList<Lipid> LIPIDcreator() throws NullPointerException, InvalidFASizeException {
 		ArrayList<Lipid> LIPIDs = new ArrayList<Lipid>();
 		ArrayList<Fatty_acid> FAs = FAcreator();
 		ArrayList<Skeleton> SKEs = SKEcreator();

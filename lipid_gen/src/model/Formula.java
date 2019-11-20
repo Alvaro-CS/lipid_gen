@@ -7,6 +7,7 @@ import java.util.TreeMap;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import Exceptions.InvalidFormulaException;
 import utilities.ElementsComparator;
 import utilities.Periodic_table;
 
@@ -31,7 +32,7 @@ public class Formula {
 	 * @param mapformula the HashMap
 	 * @throws Exception
 	 */
-	public Formula(Map<Element, Integer> formula) throws Exception {
+	public Formula(Map<Element, Integer> formula) {
 		this.mapFormula.putAll(formula);
 	}
 
@@ -43,11 +44,12 @@ public class Formula {
 	 * @param formula (string)
 	 * @throws Exception
 	 */
-	public Formula(String formula) throws Exception {
+	public Formula(String formula) throws InvalidFormulaException {
 		if (isValidFormula(formula)) {
 			createMapFormula(formula);
 		} else {
-			throw new Exception("The formula doesn't have a correct format or there are non-existing elements.");
+			throw new InvalidFormulaException(
+					"The formula doesn't have a correct format or there are non-existing elements.");
 
 		}
 
@@ -59,7 +61,7 @@ public class Formula {
 	 * @param f1 The object formula we want to make a copy of.
 	 * @throws Exception
 	 */
-	public Formula(Formula f1) throws Exception {
+	public Formula(Formula f1) {
 		this(f1.mapFormula);
 	}
 
@@ -72,9 +74,9 @@ public class Formula {
 	 * @param num amount of elements
 	 * @throws Exception
 	 */
-	public void addElementToFormula(Element e, int num) throws Exception {
+	public void addElementToFormula(Element e, int num) throws IllegalArgumentException {
 		if (num <= 0) {
-			throw new Exception("We can't add a negative amount of elements.");
+			throw new IllegalArgumentException("We can't add a negative amount of elements.");
 		} else if (this.mapFormula.containsKey(e)) {
 			this.mapFormula.put(e, num + this.mapFormula.get(e));
 		} else {
@@ -90,17 +92,17 @@ public class Formula {
 	 * @param num amount of elements
 	 * @throws Exception
 	 */
-	public void remove(Element e, int num) throws Exception {
+	public void remove(Element e, int num) throws IllegalArgumentException {
 		if (this.mapFormula.containsKey(e)) {
 			if (this.mapFormula.get(e) > num) {
 				this.mapFormula.put(e, this.mapFormula.get(e) - num);
 			} else if (this.mapFormula.get(e) == num) {
 				this.mapFormula.remove(e);
 			} else if (this.mapFormula.get(e) < num) {
-				throw new Exception("There's not enough elements in the formula for the deletion.");
+				throw new IllegalArgumentException("There's not enough elements in the formula for the deletion.");
 			}
 		} else {
-			throw new Exception("The formula doesn't have this element, so we can't delete it.");
+			throw new IllegalArgumentException("The formula doesn't have this element, so we can't delete it.");
 		}
 
 	}
@@ -121,37 +123,29 @@ public class Formula {
 	 * @return true/false depending if the formula is valid or not
 	 */
 	public static boolean isValidFormula(String formula) {
-//		System.out.println("Fórmula a analizar: " + formula);
 		char[] formulaChecker = formula.toCharArray();
-		// System.out.println(formulaChecker);
-		// System.out.println("Grupos encontrados (excluyendo paréntesis):");
 		Matcher matcher = patternSP.matcher(formula);
 
 		while (matcher.find()) {
-			// System.out.println(matcher.group());
 			for (int n = matcher.start(); n < matcher.end(); n++) {
 				formulaChecker[n] = '\0';
 
 			}
 		}
-		// System.out.println("Grupos de paréntesis encontrados:");
 		matcher = patternPG.matcher(formula);
 		while (matcher.find()) {
-			// System.out.println(matcher.group());
 			for (int n = matcher.start(); n < matcher.end(); n++) {
 				formulaChecker[n] = '\0';
 
 			}
 
 		}
-		// System.out.println(formulaChecker);
 		for (int n = 0; n < formulaChecker.length; n++) {
 			if (formulaChecker[n] != '\0')
 				return false;
 		}
 		ArrayList<String> elementsSP = getFormulaSPData(formula);
 		ArrayList<String> elementsPG = getFormulaPGData(formula);
-		// System.out.println(elementsSP);
 		for (int n = 0; n < elementsSP.size(); n++) {
 			// We obtain the "element" part of the string
 			matcher = patternE.matcher(elementsSP.get(n));
@@ -165,20 +159,16 @@ public class Formula {
 				return false;
 			}
 		}
-		// System.out.println(elementsPG);
 		String string_elementsPG = "";
 		for (int n = 0; n < elementsPG.size(); n++) {
 			string_elementsPG += elementsPG.get(n);
 		}
-		// System.out.println(string_elementsPG);
 		ArrayList<String> separated_elementsPG = getFormulaPGElements(string_elementsPG);
-		// System.out.println(separated_elementsPG);
 		for (int n = 0; n < separated_elementsPG.size(); n++) {
 			// We obtain the "element" part of the string
 			matcher = patternE.matcher(separated_elementsPG.get(n));
 			matcher.find();
 			String eSP = matcher.group();
-			// System.out.println(eSP);
 			try {
 				if (Periodic_table.MAPELEMENTS.containsKey(Element.valueOf(eSP)) != true) {
 					return false;
@@ -250,7 +240,7 @@ public class Formula {
 	 * @param INPUT string with a chemical formula
 	 * @return void function. It adds the elements to the Hashmap "mapformula".
 	 */
-	public void createMapFormula(String formula) throws Exception {
+	public void createMapFormula(String formula) throws IllegalStateException {
 		Matcher matcher;
 		// System.out.println(formula);
 		ArrayList<String> elementsSP = getFormulaSPData(formula);

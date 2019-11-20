@@ -4,9 +4,17 @@ import utilities.Periodic_table;
 
 public class Chemical_element {
 	protected Formula formula;
-	protected Double mass;
+	protected double mass;
 
-	public Double getMass() {
+	/**
+	 * This method takes the hash-map of the elements of the FFA/Skeleton/Lipid and
+	 * then adds the masses of all atom types by multiplying the number of atoms
+	 * with it's correspondent isotopic mass
+	 * 
+	 * @param formula of the molecule
+	 * @return Returns the mass of the molecule.
+	 */
+	public double getMass() {
 		mass = 0d;
 		for (Element e : formula.getElements()) {
 			for (Element e_table : Periodic_table.MAPELEMENTS.keySet()) {
@@ -24,7 +32,6 @@ public class Chemical_element {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((formula == null) ? 0 : formula.hashCode());
-		result = prime * result + ((mass == null) ? 0 : mass.hashCode());
 		return result;
 	}
 
@@ -42,12 +49,8 @@ public class Chemical_element {
 				return false;
 		} else if (!formula.equals(other.formula))
 			return false;
-		if (mass == null) {
-			if (other.mass != null)
-				return false;
-		} else if (!mass.equals(other.mass))
-			return false;
+
 		return true;
-	}
+	}// TODO equals
 
 }

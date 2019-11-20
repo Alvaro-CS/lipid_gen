@@ -3,7 +3,7 @@ package model;
 import java.util.LinkedList;
 import java.util.List;
 
-import utilities.Periodic_table;
+import Exceptions.InvalidFASizeException;
 import utilities.Ske_type_prop;
 
 public class Lipid extends Chemical_element {
@@ -22,7 +22,7 @@ public class Lipid extends Chemical_element {
 	 * @param FAs      the list of Fatty Acids
 	 * @throws Exception
 	 */
-	public Lipid(Skeleton skeleton, List<Fatty_acid> FAs) throws Exception {
+	public Lipid(Skeleton skeleton, List<Fatty_acid> FAs) throws InvalidFASizeException, NullPointerException {
 		if (skeleton == null || FAs == null) {
 			throw new NullPointerException();
 		}
@@ -37,7 +37,7 @@ public class Lipid extends Chemical_element {
 		if (FAs.size() > Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).getMaxFAs()
 				|| FAs.size() < Ske_type_prop.MAPSKE.get(skeleton.getSke_type()).getMinFAs()) {
 
-			throw new Exception("The number of Fatty Acids is not the appropiate for this skeleton.");
+			throw new InvalidFASizeException("The number of Fatty Acids is not the appropiate for this skeleton.");
 		}
 		this.FAs = FAs;
 
@@ -57,7 +57,7 @@ public class Lipid extends Chemical_element {
 		formula = fa.getFormula();
 		abbvName = calculateName(fa);
 		name = calculateName(fa);
-		mass = calculateMass(formula);
+		mass = getMass();
 		length = fa.getC();
 		doubleBonds = fa.getDouble_bonds();
 		this.FAs = new LinkedList<Fatty_acid>();
@@ -102,7 +102,7 @@ public class Lipid extends Chemical_element {
 	 * @return The formula of the lipid.
 	 * @throws Exception
 	 */
-	public static Formula calculateLipidFormula(Skeleton ske, List<Fatty_acid> FAs) throws Exception {
+	public static Formula calculateLipidFormula(Skeleton ske, List<Fatty_acid> FAs) {
 		Formula lipid_formula = new Formula(ske.getFormula());
 		for (Fatty_acid fa : FAs) {
 			Formula FA_formula = fa.getFormula();
@@ -118,28 +118,6 @@ public class Lipid extends Chemical_element {
 			 */
 		}
 		return lipid_formula;
-
-	}
-
-	/**
-	 * This method takes the hash-map of the elements of the FFA/Skeleton/Lipid and
-	 * then adds the masses of all atom types by multiplying the number of atoms
-	 * with it's correspondent isotopic mass
-	 * 
-	 * @param formula of the molecule
-	 * @return Returns the mass of the molecule.
-	 */
-	public static Double calculateMass(Formula formula) {// TODO incorrect class?
-		Double molecule_mass = 0d;
-		for (Element e : formula.getElements()) {
-			for (Element e_table : Periodic_table.MAPELEMENTS.keySet()) {
-				if (e.equals(e_table)) {
-					molecule_mass = molecule_mass + formula.getElementQuantity(e) * Periodic_table.MAPELEMENTS.get(e);
-				}
-
-			}
-		}
-		return molecule_mass;
 
 	}
 

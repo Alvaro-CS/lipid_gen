@@ -52,7 +52,6 @@ class FormulaTest {
 
 			Formula formulaExpected = new Formula(elements);
 			Formula formula = new Formula(string);
-			// System.out.println("TOSTRING: " + formula);
 			assertEquals(formulaExpected, formula);
 
 		} catch (Exception e) {

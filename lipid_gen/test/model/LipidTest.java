@@ -8,12 +8,13 @@ import java.util.List;
 
 import org.junit.jupiter.api.Test;
 
+import Exceptions.InvalidFASizeException;
 import utilities.Periodic_table;
 
 class LipidTest {
 
 	@Test
-	void testLipid() throws Exception {
+	void testLipidMass() throws Exception {
 		List<Fatty_acid> FAs = new ArrayList<Fatty_acid>();
 		FAs.add(new Fatty_acid(20, 2));
 		FAs.add(new Fatty_acid(30, 5));
@@ -21,19 +22,47 @@ class LipidTest {
 
 		Skeleton skeleton = new Skeleton(Ske_type.TG);
 		Lipid lipid = new Lipid(skeleton, FAs);
-//TODO check this how
-		System.out.println(lipid.getAbbvName());
-		System.out.println(lipid.getDoubleBonds());
-		System.out.println(lipid.getLength());
-		System.out.println(lipid.getName());
-		double FAs_mass = lipid.calculateMass(FAs.get(0).getFormula()) + lipid.calculateMass(FAs.get(1).getFormula())
-				+ lipid.calculateMass(FAs.get(2).getFormula());
-		double ske_mass = lipid.calculateMass(skeleton.getFormula());
+		double FAs_mass = FAs.get(0).getMass() + FAs.get(1).getMass() + FAs.get(2).getMass();
+		double ske_mass = skeleton.getMass();
 		double mass = FAs_mass + ske_mass;
-		System.out.println(mass - Periodic_table.MAPELEMENTS.get(Element.H) * 6);
-		System.out.println(lipid.getMass());
-		System.out.println(lipid.getFormula());
-		assertTrue(true);
+		mass = mass - Periodic_table.MAPELEMENTS.get(Element.H) * 6;
+		if (mass == lipid.getMass()) {
+			assertTrue(true);
+		} else {
+			fail("Mass doesn't match.");
+		}
+	}
+
+	@Test
+	void testLipidDoubleBonds() throws Exception {
+		List<Fatty_acid> FAs = new ArrayList<Fatty_acid>();
+		FAs.add(new Fatty_acid(20, 2));
+		FAs.add(new Fatty_acid(10, 2));
+
+		Skeleton skeleton = new Skeleton(Ske_type.CE);
+		Lipid lipid = new Lipid(skeleton, FAs);
+		int db = FAs.get(0).getDouble_bonds() + FAs.get(1).getDouble_bonds();
+		if (db == lipid.getDoubleBonds()) {
+			assertTrue(true);
+		} else {
+			fail("Double bonds don't match.");
+		}
+	}
+
+	@Test
+	void testLipidLength() throws Exception {
+		List<Fatty_acid> FAs = new ArrayList<Fatty_acid>();
+		FAs.add(new Fatty_acid(20, 2));
+		FAs.add(new Fatty_acid(10, 2));
+
+		Skeleton skeleton = new Skeleton(Ske_type.CE);
+		Lipid lipid = new Lipid(skeleton, FAs);
+		int length = FAs.get(0).getC() + FAs.get(1).getC();
+		if (length == lipid.getLength()) {
+			assertTrue(true);
+		} else {
+			fail("Length doesn't match.");
+		}
 	}
 
 	@Test
@@ -47,7 +76,7 @@ class LipidTest {
 		try {
 			Lipid lipid = new Lipid(skeleton, FAs);
 			fail("DG need 2 FAs, not 3.");
-		} catch (Exception e) {
+		} catch (InvalidFASizeException e) {
 			assertTrue(true);
 		}
 	}
@@ -62,7 +91,7 @@ class LipidTest {
 			Lipid lipid = new Lipid(skeleton, FAs);
 			assertTrue(true);
 
-		} catch (Exception e) {
+		} catch (InvalidFASizeException e) {
 			fail("PA can have 1 or 2 FAs");
 
 		}
@@ -84,7 +113,6 @@ class LipidTest {
 		Fatty_acid fa = new Fatty_acid(9, 0);
 		Lipid li = new Lipid(fa);
 		Double mass = li.getMass();
-		System.out.println(mass);
 		if (mass == 158.13068d)
 			assertTrue(Boolean.TRUE);
 		else

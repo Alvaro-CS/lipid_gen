@@ -3,6 +3,7 @@ package persistence;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
@@ -87,9 +88,11 @@ public class SQLManager {
 				e.printStackTrace();
 			}
 		}
+		// TODO compoundCLassification table
 	}
 
-	public void insertLipid(Lipid l) {
+	public int insertLipid(Lipid l) {
+		int id = 0;
 		try {
 
 			String sql = "INSERT INTO compounds (compound_name,formula,mass,charge_type,charge_number,formula_type,formula_type_int,compound_type,compound_status) "
@@ -111,10 +114,15 @@ public class SQLManager {
 			prep.setInt(8, 1);
 			prep.setInt(9, 0);
 			prep.executeUpdate();
+			ResultSet rs = prep.getGeneratedKeys();
+			if (rs.next()) {
+				id = rs.getInt(1);
+			}
 			prep.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		return id;
 	}
 
 	public void insertFA(Fatty_acid fa) {
@@ -134,13 +142,34 @@ public class SQLManager {
 		}
 	}
 
+	public Integer getFAid(Fatty_acid f) {
+		try {
+			String s = "SELECT chain_id FROM chain WHERE formula=?";
+			PreparedStatement p = c.prepareStatement(s);
+			p.setString(1, f.getFormula().toString());
+			ResultSet rs = p.executeQuery();
+			int chain_id = 0;
+			while (rs.next()) {
+				chain_id = rs.getInt("chain_id");
+			}
+			rs.close();
+			p.close();
+			return chain_id;
+		} catch (SQLException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+
 	public void connectChainsLipid(int number_chains, int compound_id, int chain_id) {
 		try {
 
 			String sql = "INSERT INTO compound_chain (number_chains,compound_id,chain_id) " + "VALUES (?,?,?);";
 			PreparedStatement prep = c.prepareStatement(sql);
 			prep.setInt(1, number_chains);
-//TODO unir tablas??
+			prep.setInt(2, compound_id);
+			prep.setInt(3, chain_id);
+
 			prep.executeUpdate();
 			prep.close();
 		} catch (SQLException e) {

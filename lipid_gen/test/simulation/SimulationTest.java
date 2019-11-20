@@ -9,7 +9,6 @@ import model.Lipid;
 import model.Skeleton;
 
 class SimulationTest {
-//TODO double doesn't work as we want??
 
 	void testFaSke() throws Exception {
 		Simulation s = new Simulation();
@@ -28,6 +27,7 @@ class SimulationTest {
 
 	@Test
 	void testLipid() throws Exception {
+		// TODO pasar la lista de fa al lipid creator para no generarlo dos veces?
 		Simulation s = new Simulation();
 
 		ArrayList<Lipid> LIPIDs = s.LIPIDcreator();
@@ -38,7 +38,7 @@ class SimulationTest {
 		// Lipids with 1= 10*228+228=2508.
 		// Lipids with 2=8 Combination without repetition 25878*8=207024
 		// Lipids with 3=1 Combination without repetition 1949476
-		// More Lipids are generated than theorized???
+
 	}
 
 }

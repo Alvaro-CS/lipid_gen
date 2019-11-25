@@ -18,8 +18,10 @@ public class SQLManager {
 	public void connect() {
 		try {
 			// Open database connection
-			Class.forName("org.sqlite.JDBC");// chooses the database type we are using
-			this.c = DriverManager.getConnection("jdbc:sqlite:./db/lipid_gen.db");// this connects to the database
+			Class.forName("com.mysql.jdbc.Driver").newInstance();// chooses the database type we are using
+			this.c = DriverManager.getConnection("jdbc:mysql:./db/lipids.db", "alvaro", "alvaro");// this connects to
+																									// the
+																									// database
 			c.createStatement().execute("PRAGMA foreign_keys=ON");
 			System.out.println("Database connection opened.");
 		} catch (Exception e) {
@@ -38,9 +40,8 @@ public class SQLManager {
 
 	public void create() {
 		try {
-
 			Statement stmt1 = c.createStatement();
-			String sql1 = "CREATE TABLE compounds (" + "  compound_id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+			String sql1 = "CREATE TABLE compounds (" + "compound_id INT NOT NULL AUTOINCREMENT PRIMARY KEY  ,"
 					+ "  cas_id varchar(100) UNIQUE DEFAULT NULL," + "  compound_name text not null,"
 					+ "  formula varchar(100) DEFAULT ''," + "  mass double DEFAULT 0," + "  charge_type int default 0,"
 					+ "  charge_number int default 0," + "  formula_type varchar(20) DEFAULT NULL,"
@@ -58,7 +59,7 @@ public class SQLManager {
 			stmt1.close();
 
 			Statement stmt2 = c.createStatement();
-			String sql2 = "CREATE TABLE chains(" + "  chain_id int NOT NULL AUTO_INCREMENT PRIMARY KEY,"
+			String sql2 = "CREATE TABLE chains (" + "chain_id INT NOT NULL AUTOINCREMENT PRIMARY KEY ,"
 					+ "  num_carbons int NOT NULL," + "  double_bonds int NOT NULL,"
 					+ "  oxidation VARCHAR(10) default ''," + "  mass double," + "  formula VARCHAR(100),"
 					+ "  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
@@ -71,7 +72,7 @@ public class SQLManager {
 			stmt2.close();
 
 			Statement stmt3 = c.createStatement();
-			String sql3 = "CREATE TABLE compound_chain (" + "  compound_id INT NOT NULL," + "  chain_id int NOT NULL,"
+			String sql3 = "CREATE TABLE compound_chain (" + "compound_id INT NOT NULL," + "  chain_id int NOT NULL,"
 					+ "  number_chains int NOT NULL default 1," + "  created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
 					+ "  last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
 					+ "  FOREIGN KEY (compound_id) REFERENCES compounds(compound_id) on DELETE CASCADE,"
@@ -80,6 +81,20 @@ public class SQLManager {
 					+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
 			stmt3.executeUpdate(sql3);
 			stmt3.close();
+			Statement stmt4 = c.createStatement();
+			String sql4 = "CREATE TABLE compounds_lipids_classification (" + "compound_id int NOT NULL,"
+					+ "lipid_type varchar(150) DEFAULT ''," + "num_chains int default 0," + "number_carbons int,"
+					+ "double_bonds int," + "created TIMESTAMP DEFAULT CURRENT_TIMESTAMP,"
+					+ "last_updated TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,"
+					+ "FOREIGN KEY (compound_id) REFERENCES compounds(compound_id) on DELETE CASCADE,"
+					+ "CONSTRAINT pk_lipids_classifcation PRIMARY KEY (compound_id),"
+					+ "INDEX lipids_classification_lipid_type_index (lipid_type),"
+					+ "INDEX lipids_classification_num_chains_index (num_chains),"
+					+ "INDEX lipids_classification_number_carbons_index (number_carbons),"
+					+ "INDEX lipids_classification_double_bonds_index (double_bonds)"
+					+ ") ENGINE=InnoDB DEFAULT CHARSET=utf8;";
+			stmt4.executeUpdate(sql4);
+			stmt4.close();
 
 		} catch (SQLException e) {
 			if (e.getMessage().contains("already exists")) {
@@ -88,7 +103,6 @@ public class SQLManager {
 				e.printStackTrace();
 			}
 		}
-		// TODO compoundCLassification table
 	}
 
 	public int insertLipid(Lipid l) {
@@ -115,14 +129,31 @@ public class SQLManager {
 			prep.setInt(9, 0);
 			prep.executeUpdate();
 			ResultSet rs = prep.getGeneratedKeys();
-			if (rs.next()) {
-				id = rs.getInt(1);
-			}
+			rs.next();
+			id = rs.getInt(1);
 			prep.close();
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 		return id;
+	}
+
+	public void insertLipid_clas(Lipid l) {
+		try {
+
+			String sql = "INSERT INTO compounds_lipids_classification (lipid_type,num_chains,number_carbons,double_bonds) "
+					+ "VALUES (?,?,?,?);";
+			PreparedStatement prep = c.prepareStatement(sql);
+			prep.setString(1, l.getSkeleton().toString() + "(");
+			prep.setInt(2, l.getFAs().size());
+			prep.setInt(3, l.getLength());
+			prep.setInt(4, l.getDoubleBonds());
+
+			prep.executeUpdate();
+			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void insertFA(Fatty_acid fa) {
@@ -144,7 +175,7 @@ public class SQLManager {
 
 	public Integer getFAid(Fatty_acid f) {
 		try {
-			String s = "SELECT chain_id FROM chain WHERE formula=?";
+			String s = "SELECT chain_id FROM chains WHERE formula=?";
 			PreparedStatement p = c.prepareStatement(s);
 			p.setString(1, f.getFormula().toString());
 			ResultSet rs = p.executeQuery();
@@ -172,6 +203,55 @@ public class SQLManager {
 
 			prep.executeUpdate();
 			prep.close();
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+	}
+
+	public boolean checkLipidFAConnection(int compound_id, int chain_id) {
+		boolean exists = false;
+		try {
+			String s = "SELECT * FROM compound_chain WHERE compound_id=? AND chain_id=?";
+			PreparedStatement p = c.prepareStatement(s);
+			p.setInt(1, compound_id);
+			p.setInt(2, chain_id);
+			ResultSet rs = p.executeQuery();
+			while (rs.next()) {
+				exists = true;
+			}
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return exists;
+	}
+
+	public int getNumber_chains(int compound_id, int chain_id) {
+		Integer number_chains = null;
+		try {
+			String s = "SELECT number_chains FROM compound_chain WHERE compound_id=? AND chain_id=?";
+			PreparedStatement p = c.prepareStatement(s);
+			p.setInt(1, compound_id);
+			p.setInt(2, chain_id);
+			ResultSet rs = p.executeQuery();
+			while (rs.next()) {
+				number_chains = rs.getInt("number_chains");
+			}
+
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		return number_chains;
+	}
+
+	public void updateNumber_chains(int compound_id, int chain_id, int number_chains) {
+		try {
+			PreparedStatement p = c
+					.prepareStatement("UPDATE compound_chain SET number_chains=?  WHERE  compound_id=? AND chain_id=?");
+			p.setInt(1, number_chains);
+			p.setInt(2, compound_id);
+			p.setInt(3, chain_id);
+			p.executeUpdate();
+
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}

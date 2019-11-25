@@ -26,7 +26,6 @@ public class Simulation {
 			if (Ske_type_prop.MAPSKE.get(Ske_type.valueOf(ske.getSke_type().toString())).getMinFAs() == 1) {
 				for (int i = 0; i < FAs.size(); i++) {
 					ArrayList<Fatty_acid> fas = new ArrayList<Fatty_acid>();
-					System.out.println(FAs.get(i));
 					fas.add(FAs.get(i));
 					Lipid lipid = new Lipid(ske, fas);
 					LIPIDs.add(lipid);

@@ -25,7 +25,6 @@ class SimulationTest {
 		System.out.println("Number of SKEs: " + SKEs.size());
 	}
 
-	@Test
 	void testLipid() throws Exception {
 		// TODO pasar la lista de fa al lipid creator para no generarlo dos veces?
 		Simulation s = new Simulation();
@@ -34,10 +33,35 @@ class SimulationTest {
 		for (Lipid l : LIPIDs) {
 			System.out.println(l.toStringName());
 		}
-		System.out.println(LIPIDs.size());
-		// Lipids with 1= 10*228+228=2508.
-		// Lipids with 2=8 Combination without repetition 25878*8=207024
-		// Lipids with 3=1 Combination without repetition 1949476
+
+	}
+
+	void testSpeed() throws Exception {
+		Simulation s = new Simulation();
+		long total_time = 0;
+		for (int n = 0; n < 10; n++) {
+			long start = System.currentTimeMillis();
+			ArrayList<Lipid> LIPIDs = s.LIPIDcreator();
+			long end = System.currentTimeMillis();
+			long time = end - start;
+			System.out.println(time);
+			total_time += time;
+		}
+		total_time = total_time / 10;
+		System.out.println("Total=" + total_time); // Aprox 15235ms
+		// TODO do another different test for size
+
+	}
+
+	@Test
+	void testLipidSize() throws Exception {
+		Simulation s = new Simulation();
+
+		ArrayList<Lipid> LIPIDs = s.LIPIDcreator();
+		System.out.println("Total size " + LIPIDs.size());
+		// Lipids with 1= 10*228+228=2508
+		// Lipids with 2=8 Combination with repetition 26.106*8=208.848
+		// Lipids with 3=1 Combination with repetition 2.001.460
 
 	}
 

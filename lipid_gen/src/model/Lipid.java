@@ -268,9 +268,8 @@ public class Lipid extends Chemical_element {
 
 	@Override
 	public String toString() {
-		return "Lipid [skeleton=" + skeleton + ", FAs=" + FAs + ", name=" + name + ", abbvName=" + abbvName
-				+ ", length=" + length + ", doubleBonds=" + doubleBonds + ", formula=" + formula + ", mass=" + mass
-				+ "]";
+		return "Lipid [skeleton=" + skeleton + ", name=" + name + ", abbvName=" + abbvName + ", length=" + length
+				+ ", doubleBonds=" + doubleBonds + ", formula=" + formula + ", mass=" + mass + "]";
 	}
 
 	public String toStringName() {

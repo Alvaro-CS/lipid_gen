@@ -35,7 +35,6 @@ public class Fatty_acid extends Chemical_element {
 		this.C = C;
 		this.double_bonds = double_bonds;
 
-		// CREATE A MAP WITH THE NUMBER OF ELEMENTS LIKE HERE
 		Map<Element, Integer> elementsFA = new TreeMap<Element, Integer>();
 		elementsFA.put(Element.C, C);
 		elementsFA.put(Element.H, 2 * C - (double_bonds * 2));

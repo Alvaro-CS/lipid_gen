@@ -242,11 +242,9 @@ public class Formula {
 	 */
 	public void createMapFormula(String formula) throws IllegalStateException {
 		Matcher matcher;
-		// System.out.println(formula);
+		System.out.println(formula);
 		ArrayList<String> elementsSP = getFormulaSPData(formula);
 		ArrayList<String> elementsPG = getFormulaPGData(formula);
-		// System.out.println(elementsSP);
-		// System.out.println(elementsPG);
 		for (int n = 0; n < elementsSP.size(); n++) {
 			matcher = patternE.matcher(elementsSP.get(n));
 			matcher.find();
@@ -261,7 +259,6 @@ public class Formula {
 			}
 
 			addElementToFormula(Element.valueOf(eSP), nSP);
-			// System.out.println("Metemos elemento " + eSP + " con " + nSP);
 
 		} // finished adding non-parentheses elements.
 		for (int n = 0; n < elementsPG.size(); n++) {
@@ -272,11 +269,11 @@ public class Formula {
 			while (matcher.find()) {
 				eInsideP.add(matcher.group());
 			}
-
 			char lastC = elementsPG.get(n).charAt(elementsPG.get(n).length() - 1);
 			if (Character.isDigit(lastC)) {
 				multiplier = Character.getNumericValue(lastC);// we get the last character of
 				// the groups, that would be a number.
+
 			} else {
 				multiplier = 1;
 			}
@@ -296,7 +293,7 @@ public class Formula {
 				}
 
 				addElementToFormula(Element.valueOf(eSP), nSP * multiplier);
-				// System.out.println("Metemos elemento " + eSP + " con " + nSP * multiplier);
+				System.out.println("Metemos elemento " + eSP + " con " + nSP * multiplier);
 
 			}
 		}

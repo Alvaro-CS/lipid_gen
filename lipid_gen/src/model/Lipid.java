@@ -6,7 +6,7 @@ import java.util.List;
 import Exceptions.InvalidFASizeException;
 import utilities.Ske_type_prop;
 
-public class Lipid extends Chemical_element {
+public class Lipid extends Chemical_compound {
 	private final Skeleton skeleton;
 	private final List<Fatty_acid> FAs;
 	private final String name;

@@ -5,7 +5,7 @@ import java.util.TreeMap;
 
 import Exceptions.Fatty_acidCreationException;
 
-public class Fatty_acid extends Chemical_element {
+public class Fatty_acid extends Chemical_compound {
 
 	private int C;
 	private int double_bonds;

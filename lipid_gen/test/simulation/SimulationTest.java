@@ -26,7 +26,6 @@ class SimulationTest {
 	}
 
 	void testLipid() throws Exception {
-		// TODO pasar la lista de fa al lipid creator para no generarlo dos veces?
 		Simulation s = new Simulation();
 
 		ArrayList<Lipid> LIPIDs = s.LIPIDcreator();

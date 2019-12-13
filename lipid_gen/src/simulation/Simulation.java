@@ -13,7 +13,6 @@ public class Simulation {
 	public Simulation() {
 	}
 
-//TODO calculate time in each for
 	public ArrayList<Lipid> LIPIDcreator() throws NullPointerException, InvalidFASizeException {
 		ArrayList<Lipid> LIPIDs = new ArrayList<Lipid>();
 		ArrayList<Fatty_acid> FAs = FAcreator();

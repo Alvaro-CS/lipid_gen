@@ -2,7 +2,7 @@ package model;
 
 import utilities.Ske_type_prop;
 
-public class Skeleton extends Chemical_element {
+public class Skeleton extends Chemical_compound {
 
 	private final Ske_type ske_type;
 

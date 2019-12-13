@@ -2,7 +2,7 @@ package model;
 
 import utilities.Periodic_table;
 
-public class Chemical_element {
+public class Chemical_compound {
 	protected Formula formula;
 	protected double mass;
 
@@ -43,7 +43,7 @@ public class Chemical_element {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Chemical_element other = (Chemical_element) obj;
+		Chemical_compound other = (Chemical_compound) obj;
 		if (formula == null) {
 			if (other.formula != null)
 				return false;
